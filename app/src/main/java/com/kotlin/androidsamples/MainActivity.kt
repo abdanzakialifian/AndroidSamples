@@ -14,6 +14,8 @@ import com.kotlin.androidsamples.databinding.ActivityMainBinding
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
+    private var moduleName = ""
+
     private var mySessionId = 0
 
     private val moduleActivityBackStack by lazy { resources.getString(R.string.module_dynamic_app_launcher) }
@@ -51,8 +53,7 @@ class MainActivity : AppCompatActivity() {
 
                 SplitInstallSessionStatus.INSTALLED -> {
                     Log.d(this::class.java.simpleName, "INSTALLED")
-
-                    navigateToDynamicFeatureModule("com.kotlin.androidsamples.dynamicapplauncher.DynamicAppLauncherActivity")
+                    navigateToDynamicFeatureModule(moduleName)
                 }
 
                 SplitInstallSessionStatus.FAILED -> {
@@ -77,17 +78,27 @@ class MainActivity : AppCompatActivity() {
 
         binding.apply {
             btnDynamicAppIcon.setOnClickListener {
-                navigateToDynamicFeatureModule("com.kotlin.androidsamples.dynamicapplauncher.DynamicAppLauncherActivity")
+                moduleName = DYNAMIC_APP_LAUNCHER_MODULE
+                navigateToDynamicFeatureModule(moduleName)
+            }
+            btnMockResponseRetrofit.setOnClickListener {
+                moduleName = MOCK_RESPONSE_RETROFIT_MODULE
+                navigateToDynamicFeatureModule(moduleName)
             }
         }
     }
 
     private fun navigateToDynamicFeatureModule(activityNameWithPackageLocation: String) {
-        if (splitInstallManager.installedModules.contains(moduleActivityBackStack)) {
-            val intent = Intent().setClassName(this@MainActivity, activityNameWithPackageLocation)
-            startActivity(intent)
-        } else {
-            initSplitInstallManager()
+        try {
+            if (splitInstallManager.installedModules.contains(moduleActivityBackStack)) {
+                val intent =
+                    Intent().setClassName(this@MainActivity, activityNameWithPackageLocation)
+                startActivity(intent)
+            } else {
+                initSplitInstallManager()
+            }
+        } catch (e: Exception) {
+            Log.d(this::class.java.simpleName, "ERROR : ${e.message}")
         }
     }
 
@@ -116,10 +127,15 @@ class MainActivity : AppCompatActivity() {
             }
     }
 
-
-
     override fun onDestroy() {
         splitInstallManager.unregisterListener(splitInstallManagerListener)
         super.onDestroy()
+    }
+
+    companion object {
+        private const val DYNAMIC_APP_LAUNCHER_MODULE =
+            "com.kotlin.androidsamples.dynamicapplauncher.DynamicAppLauncherActivity"
+        private const val MOCK_RESPONSE_RETROFIT_MODULE =
+            "com.kotlin.androidsamples.mockresponseretrofit"
     }
 }
