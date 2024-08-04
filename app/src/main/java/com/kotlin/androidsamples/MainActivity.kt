@@ -136,6 +136,6 @@ class MainActivity : AppCompatActivity() {
         private const val DYNAMIC_APP_LAUNCHER_MODULE =
             "com.kotlin.androidsamples.dynamicapplauncher.DynamicAppLauncherActivity"
         private const val MOCK_RESPONSE_RETROFIT_MODULE =
-            "com.kotlin.androidsamples.mockresponseretrofit"
+            "com.kotlin.androidsamples.mockresponseretrofit.MockResponseRetrofitActivity"
     }
 }
