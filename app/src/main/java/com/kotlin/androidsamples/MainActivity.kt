@@ -3,7 +3,6 @@ package com.kotlin.androidsamples
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.google.android.play.core.splitinstall.SplitInstallManagerFactory
@@ -52,12 +51,8 @@ class MainActivity : AppCompatActivity() {
 
                 SplitInstallSessionStatus.INSTALLED -> {
                     Log.d(this::class.java.simpleName, "INSTALLED")
-                    Toast.makeText(this, "INSTALLED MODULES", Toast.LENGTH_SHORT).show()
 
-                    val packageActivityName =
-                        "com.kotlin.androidsamples.features.activitybackstack.FirstActivity"
-                    val intent = Intent().setClassName(this, packageActivityName)
-                    startActivity(intent)
+                    navigateToDynamicFeatureModule("com.kotlin.androidsamples.dynamicapplauncher.DynamicAppLauncherActivity")
                 }
 
                 SplitInstallSessionStatus.FAILED -> {
@@ -82,21 +77,21 @@ class MainActivity : AppCompatActivity() {
 
         binding.apply {
             btnActivityBackstack.setOnClickListener {
-                if (splitInstallManager.installedModules.contains(moduleActivityBackStack)) {
-                    Toast.makeText(this@MainActivity, "ALREADY MODULE", Toast.LENGTH_SHORT).show()
-
-                    val packageActivityName =
-                        "com.kotlin.androidsamples.dynamicapplauncher.DynamicAppLauncherActivity"
-                    val intent = Intent().setClassName(this@MainActivity, packageActivityName)
-                    startActivity(intent)
-                } else {
-                    initSplitInstallManager()
-                }
+                navigateToDynamicFeatureModule("com.kotlin.androidsamples.dynamicapplauncher.DynamicAppLauncherActivity")
             }
 
             btnDynamicAppIcon.setOnClickListener {
                 startService(Intent(this@MainActivity, AppIconChangeService::class.java))
             }
+        }
+    }
+
+    private fun navigateToDynamicFeatureModule(activityNameWithPackageLocation: String) {
+        if (splitInstallManager.installedModules.contains(moduleActivityBackStack)) {
+            val intent = Intent().setClassName(this@MainActivity, activityNameWithPackageLocation)
+            startActivity(intent)
+        } else {
+            initSplitInstallManager()
         }
     }
 
@@ -106,8 +101,6 @@ class MainActivity : AppCompatActivity() {
             // module you want to install.
             .addModule(moduleActivityBackStack)
             .build()
-
-        Toast.makeText(this, "START INSTALL MODULE", Toast.LENGTH_SHORT).show()
 
         splitInstallManager.registerListener(splitInstallManagerListener)
 
@@ -123,7 +116,6 @@ class MainActivity : AppCompatActivity() {
                 mySessionId = sessionId
             }
             .addOnFailureListener { exception ->
-                Toast.makeText(this, "EXCEPTION : $exception", Toast.LENGTH_SHORT).show()
                 Log.d(this::class.java.simpleName, "EXCEPTION $exception")
             }
     }

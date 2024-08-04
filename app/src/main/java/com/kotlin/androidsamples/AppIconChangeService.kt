@@ -5,19 +5,15 @@ import android.content.ComponentName
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.IBinder
-import android.util.Log
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.ktx.remoteConfig
 import com.google.firebase.remoteconfig.remoteConfigSettings
-import org.json.JSONObject
 
 class AppIconChangeService : Service() {
     private var firebaseRemoteConfig: FirebaseRemoteConfig = Firebase.remoteConfig
 
-    private var enabled: String = "MainActivity"
-
-    private var disabled: String = ""
+    private var dynamicLauncherName = ActivityLauncher.DEFAULT.launcherName
 
     override fun onCreate() {
         super.onCreate()
@@ -30,10 +26,21 @@ class AppIconChangeService : Service() {
 
         firebaseRemoteConfig.fetchAndActivate().addOnCompleteListener { task ->
             if (task.isSuccessful) {
-                val jsonString = Firebase.remoteConfig.getString("launcher_icon")
-                val json = JSONObject(jsonString)
-                enabled = json.optString("enable")
-                disabled = json.optString("disable")
+                val launcherName =
+                    Firebase.remoteConfig.getString(LAUNCHER_NAME_FIREBASE_REMOTE_CONFIG)
+                dynamicLauncherName =
+                    if (launcherName.isBlank() ||
+                        ActivityLauncher.entries.any {
+                            it.launcherName.equals(
+                                launcherName,
+                                ignoreCase = true
+                            )
+                        }.not()
+                    ) {
+                        ActivityLauncher.DEFAULT.launcherName
+                    } else {
+                        launcherName
+                    }
             }
         }
     }
@@ -43,30 +50,29 @@ class AppIconChangeService : Service() {
     override fun onTaskRemoved(rootIntent: Intent?) {
         super.onTaskRemoved(rootIntent)
 
-        changeIcon(enabled, disabled)
+        setupLauncher(dynamicLauncherName)
     }
 
-    private fun changeIcon(enabled: String, disabled: String) {
-        try {
-            packageManager.setComponentEnabledSetting(
-                ComponentName(
-                    this,
-                    "$packageName.$enabled"
-                ),
-                PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-                PackageManager.DONT_KILL_APP
-            )
+    private fun setupLauncher(dynamicLauncherName: String) {
+        for (launcher in ActivityLauncher.entries) {
+            val isEnabledLauncher =
+                launcher.launcherName.equals(dynamicLauncherName, ignoreCase = true)
 
             packageManager.setComponentEnabledSetting(
-                ComponentName(
-                    this,
-                    "$packageName.$disabled"
-                ),
-                PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                ComponentName(this, launcher.activityPackageLocation),
+                if (isEnabledLauncher) PackageManager.COMPONENT_ENABLED_STATE_ENABLED else PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
                 PackageManager.DONT_KILL_APP
             )
-        } catch (e: Exception) {
-            Log.d(this::class.java.simpleName, "ERROR : $e")
         }
     }
+
+    companion object {
+        private const val LAUNCHER_NAME_FIREBASE_REMOTE_CONFIG = "launcher_name"
+    }
+}
+
+enum class ActivityLauncher(val launcherName: String, val activityPackageLocation: String) {
+    DEFAULT("DEFAULT", "com.kotlin.androidsamples.MainActivity"),
+    NEW_YEAR("NEW YEAR", "com.kotlin.androidsamples.NewYearActivityAlias"),
+    EID("EID", "com.kotlin.androidsamples.EidActivityAlias")
 }
