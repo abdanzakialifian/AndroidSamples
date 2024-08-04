@@ -46,15 +46,12 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
-    implementation(libs.firebase.config)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-
     // This dependency is downloaded from the Google’s Maven repository.
     // Make sure you also include that repository in your project's build.gradle file.
     implementation(libs.feature.delivery)
-
     // For Kotlin users, also import the Kotlin extensions library for Play Feature Delivery:
     implementation(libs.feature.delivery.ktx)
 }

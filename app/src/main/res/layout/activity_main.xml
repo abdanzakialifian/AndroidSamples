@@ -9,25 +9,14 @@
     tools:context=".MainActivity">
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_activity_backstack"
+        android:id="@+id/btn_dynamic_app_icon"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Activity BackStack"
+        android:text="Dynamic App Launcher"
         android:textAllCaps="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_dynamic_app_icon"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="Dynamic App Icon"
-        android:textAllCaps="false"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btn_activity_backstack" />
 
     <ProgressBar
         android:id="@+id/progress_bar"

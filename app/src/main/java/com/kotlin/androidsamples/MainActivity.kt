@@ -76,12 +76,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.apply {
-            btnActivityBackstack.setOnClickListener {
-                navigateToDynamicFeatureModule("com.kotlin.androidsamples.dynamicapplauncher.DynamicAppLauncherActivity")
-            }
-
             btnDynamicAppIcon.setOnClickListener {
-                startService(Intent(this@MainActivity, AppIconChangeService::class.java))
+                navigateToDynamicFeatureModule("com.kotlin.androidsamples.dynamicapplauncher.DynamicAppLauncherActivity")
             }
         }
     }

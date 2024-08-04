@@ -1,16 +1,19 @@
-package com.kotlin.androidsamples
+package com.kotlin.androidsamples.dynamicapplauncher
 
 import android.app.Service
 import android.content.ComponentName
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.os.Handler
 import android.os.IBinder
+import android.os.Looper
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.ktx.remoteConfig
 import com.google.firebase.remoteconfig.remoteConfigSettings
 
-class AppIconChangeService : Service() {
+class DynamicAppLauncherService : Service() {
     private var firebaseRemoteConfig: FirebaseRemoteConfig = Firebase.remoteConfig
 
     private var dynamicLauncherName = ActivityLauncher.DEFAULT.launcherName
@@ -25,23 +28,37 @@ class AppIconChangeService : Service() {
         firebaseRemoteConfig.setConfigSettingsAsync(configSettings)
 
         firebaseRemoteConfig.fetchAndActivate().addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                val launcherName =
-                    Firebase.remoteConfig.getString(LAUNCHER_NAME_FIREBASE_REMOTE_CONFIG)
-                dynamicLauncherName =
-                    if (launcherName.isBlank() ||
-                        ActivityLauncher.entries.any {
-                            it.launcherName.equals(
-                                launcherName,
-                                ignoreCase = true
-                            )
-                        }.not()
-                    ) {
-                        ActivityLauncher.DEFAULT.launcherName
-                    } else {
-                        launcherName
-                    }
-            }
+            val intent = Intent(DynamicAppLauncherActivity.ACTION_FETCH_STATE)
+
+            intent.putExtra(DynamicAppLauncherActivity.FETCH_STATE, DynamicAppLauncherActivity.LOADING)
+
+            LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
+
+            // Set delay to simulate loading in activity
+            Handler(Looper.getMainLooper()).postDelayed({
+                if (task.isSuccessful) {
+                    val launcherName =
+                        Firebase.remoteConfig.getString(LAUNCHER_NAME_FIREBASE_REMOTE_CONFIG)
+                    dynamicLauncherName =
+                        if (launcherName.isBlank() ||
+                            ActivityLauncher.entries.any {
+                                it.launcherName.equals(
+                                    launcherName,
+                                    ignoreCase = true
+                                )
+                            }.not()
+                        ) {
+                            ActivityLauncher.DEFAULT.launcherName
+                        } else {
+                            launcherName
+                        }
+                    intent.putExtra(DynamicAppLauncherActivity.FETCH_STATE, DynamicAppLauncherActivity.SUCCESS)
+                } else {
+                    intent.putExtra(DynamicAppLauncherActivity.FETCH_STATE, DynamicAppLauncherActivity.FAILED)
+                }
+
+                LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
+            }, 1000L)
         }
     }
 
@@ -73,6 +90,6 @@ class AppIconChangeService : Service() {
 
 enum class ActivityLauncher(val launcherName: String, val activityPackageLocation: String) {
     DEFAULT("DEFAULT", "com.kotlin.androidsamples.MainActivity"),
-    NEW_YEAR("NEW YEAR", "com.kotlin.androidsamples.NewYearActivityAlias"),
-    EID("EID", "com.kotlin.androidsamples.EidActivityAlias")
+    NEW_YEAR("NEW YEAR", "com.kotlin.androidsamples.dynamicapplauncher.NewYearActivityAlias"),
+    EID("EID", "com.kotlin.androidsamples.dynamicapplauncher.EidActivityAlias")
 }
