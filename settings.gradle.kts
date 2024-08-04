@@ -22,3 +22,4 @@ dependencyResolutionManagement {
 rootProject.name = "Android Samples"
 include(":app")
 include(":dynamicapplauncher")
+include(":mockresponseretrofit")

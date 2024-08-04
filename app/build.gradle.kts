@@ -37,7 +37,7 @@ android {
     buildFeatures {
         viewBinding = true
     }
-    dynamicFeatures += setOf(":dynamicapplauncher")
+    dynamicFeatures += setOf(":dynamicapplauncher", ":mockresponseretrofit")
 }
 
 dependencies {
