@@ -32,6 +32,7 @@ android {
 
     buildFeatures {
         viewBinding = true
+        buildConfig = true
     }
 }
 
@@ -47,4 +48,10 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
     implementation(libs.okhttp)
     implementation(libs.retrofit)
+    implementation(libs.gson)
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0-RC")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.9.0-RC")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.8")
+    implementation("androidx.activity:activity-ktx:1.3.1")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
 }
