@@ -1,4 +1,4 @@
-package com.kotlin.androidsamples.mockresponseretrofit.network.okhttp
+package com.kotlin.androidsamples.mockresponseretrofit.utils
 
 @Retention(AnnotationRetention.RUNTIME)
 @Target(AnnotationTarget.FUNCTION)
