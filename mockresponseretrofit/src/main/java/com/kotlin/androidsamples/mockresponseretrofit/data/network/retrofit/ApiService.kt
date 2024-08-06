@@ -1,8 +1,8 @@
-package com.kotlin.androidsamples.mockresponseretrofit.network.retrofit
+package com.kotlin.androidsamples.mockresponseretrofit.data.network.retrofit
 
 import com.kotlin.androidsamples.mockresponseretrofit.utils.MOCK
-import com.kotlin.androidsamples.mockresponseretrofit.network.response.ListUsersResponse
-import com.kotlin.androidsamples.mockresponseretrofit.network.response.UserResponse
+import com.kotlin.androidsamples.mockresponseretrofit.data.network.response.ListUsersResponse
+import com.kotlin.androidsamples.mockresponseretrofit.data.network.response.UserResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
 

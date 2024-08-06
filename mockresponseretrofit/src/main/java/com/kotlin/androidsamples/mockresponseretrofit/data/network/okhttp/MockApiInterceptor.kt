@@ -1,4 +1,4 @@
-package com.kotlin.androidsamples.mockresponseretrofit.network.okhttp
+package com.kotlin.androidsamples.mockresponseretrofit.data.network.okhttp
 
 import android.content.Context
 import com.kotlin.androidsamples.mockresponseretrofit.utils.MOCK

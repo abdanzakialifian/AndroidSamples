@@ -1,4 +1,4 @@
-package com.kotlin.androidsamples.mockresponseretrofit.network.response
+package com.kotlin.androidsamples.mockresponseretrofit.data.network.response
 
 import com.google.gson.annotations.SerializedName
 
