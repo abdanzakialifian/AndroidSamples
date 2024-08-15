@@ -7,15 +7,15 @@ import java.io.BufferedReader
 import java.io.IOException
 
 object Utils {
-    fun readJsonFile(context: Context, fileName: String): String {
+    fun readAssetFileWithMessageException(context: Context, fileName: String): String {
         return try {
             context
                 .assets
                 .open(fileName)
                 .bufferedReader()
                 .use(BufferedReader::readText)
-        } catch (e: EOFException) {
-            ""
+        } catch (e: Exception) {
+            e.toString()
         }
     }
 
