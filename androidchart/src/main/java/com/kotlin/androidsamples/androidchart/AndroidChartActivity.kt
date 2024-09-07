@@ -14,8 +14,6 @@ import android.widget.SeekBar.OnSeekBarChangeListener
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import com.github.mikephil.charting.charts.LineChart
-import com.github.mikephil.charting.components.Legend
-import com.github.mikephil.charting.components.Legend.LegendForm
 import com.github.mikephil.charting.components.YAxis.AxisDependency
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
@@ -25,8 +23,9 @@ import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
 import com.github.mikephil.charting.utils.ColorTemplate
 import com.kotlin.androidsamples.androidchart.databinding.ActivityAndroidChartBinding
-import java.time.LocalDate
+import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Locale
 import kotlin.random.Random
 
 class AndroidChartActivity : DemoBase(), OnSeekBarChangeListener,
@@ -42,10 +41,6 @@ class AndroidChartActivity : DemoBase(), OnSeekBarChangeListener,
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAndroidChartBinding.inflate(layoutInflater)
-//        window.setFlags(
-//            WindowManager.LayoutParams.FLAG_FULLSCREEN,
-//            WindowManager.LayoutParams.FLAG_FULLSCREEN
-//        )
         setContentView(binding.root)
 
         title = "LineChartActivity2"
@@ -86,7 +81,7 @@ class AndroidChartActivity : DemoBase(), OnSeekBarChangeListener,
         seekBarX.progress = 7
         seekBarY.progress = 30
 
-        chart.animateX(1500)
+        chart.animateX(700)
 
 
         // get the legend (only possible after setting data)
@@ -133,23 +128,33 @@ class AndroidChartActivity : DemoBase(), OnSeekBarChangeListener,
         val lowerBound = 200
         val upperBound = 1000
 
+        val calendars = ArrayList<Calendar>()
         val values2 = ArrayList<Entry>()
-
-        for (i in 0 until count) {
-            val calendar = Calendar.getInstance()
-            calendar.add(Calendar.DAY_OF_MONTH, i)
-            val futureDate = calendar.get(Calendar.DAY_OF_MONTH)
-            values2.add(Entry(futureDate.toFloat(), Random.nextInt(lowerBound, upperBound).toFloat()))
-        }
-
         val values3 = ArrayList<Entry>()
 
-
         for (i in 0 until count) {
             val calendar = Calendar.getInstance()
             calendar.add(Calendar.DAY_OF_MONTH, i)
-            val futureDate = calendar.get(Calendar.DAY_OF_MONTH)
-            values3.add(Entry(futureDate.toFloat(), Random.nextInt(lowerBound, upperBound).toFloat()))
+            calendars.add(calendar)
+            values2.add(Entry(i.toFloat(), Random.nextInt(lowerBound, upperBound).toFloat()))
+            values3.add(Entry(i.toFloat(), Random.nextInt(lowerBound, upperBound).toFloat()))
+        }
+
+        chart.xAxis.axisMinimum = 0F
+        chart.xAxis.axisMaximum = calendars.size.toFloat() - 1
+        chart.xAxis.labelCount = calendars.size - 1
+        chart.xAxis.valueFormatter = object : ValueFormatter() {
+            override fun getFormattedValue(value: Float): String {
+                val index = value.toInt()
+
+                if (index >= 0 && index < calendars.size) {
+                    val futureDate = calendars[index].time
+                    val formatter = SimpleDateFormat("dd/MM", Locale.getDefault())
+                    val date = formatter.format(futureDate)
+                    return date
+                }
+                return ""
+            }
         }
 
         val set2: LineDataSet?
