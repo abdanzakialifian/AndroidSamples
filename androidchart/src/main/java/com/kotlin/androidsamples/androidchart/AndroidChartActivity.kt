@@ -16,18 +16,18 @@ import androidx.core.content.ContextCompat
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.components.Legend.LegendForm
-import com.github.mikephil.charting.components.LimitLine
-import com.github.mikephil.charting.components.LimitLine.LimitLabelPosition
 import com.github.mikephil.charting.components.YAxis.AxisDependency
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
-import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
 import com.github.mikephil.charting.utils.ColorTemplate
 import com.kotlin.androidsamples.androidchart.databinding.ActivityAndroidChartBinding
+import java.time.LocalDate
+import java.util.Calendar
+import kotlin.random.Random
 
 class AndroidChartActivity : DemoBase(), OnSeekBarChangeListener,
     OnChartValueSelectedListener {
@@ -35,9 +35,9 @@ class AndroidChartActivity : DemoBase(), OnSeekBarChangeListener,
 
     private lateinit var chart: LineChart
     private lateinit var seekBarX: SeekBar
-    private lateinit var seekBarY:SeekBar
+    private lateinit var seekBarY: SeekBar
     private lateinit var tvX: TextView
-    private lateinit var tvY:TextView
+    private lateinit var tvY: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -83,7 +83,7 @@ class AndroidChartActivity : DemoBase(), OnSeekBarChangeListener,
 
 
         // add data
-        seekBarX.progress = 20
+        seekBarX.progress = 7
         seekBarY.progress = 30
 
         chart.animateX(1500)
@@ -91,38 +91,26 @@ class AndroidChartActivity : DemoBase(), OnSeekBarChangeListener,
 
         // get the legend (only possible after setting data)
         val l = chart.legend
+        l.isEnabled = false
 
-        // modify the legend ...
-        l.form = LegendForm.LINE
-        l.typeface = tfLight
-        l.textSize = 11f
-        l.textColor = Color.WHITE
-        l.verticalAlignment = Legend.LegendVerticalAlignment.BOTTOM
-        l.horizontalAlignment = Legend.LegendHorizontalAlignment.LEFT
-        l.orientation = Legend.LegendOrientation.HORIZONTAL
-        l.setDrawInside(false)
-
-        //        l.setYOffset(11f);
         val xAxis = chart.xAxis
-        xAxis.enableGridDashedLine(10f,10f,10f)
-        xAxis.setDrawGridLines(true)
+        xAxis.enableGridDashedLine(10f, 10f, 10f)
         xAxis.setDrawAxisLine(false)
-        xAxis.setAvoidFirstLastClipping(false)
-        xAxis.setDrawGridLinesBehindData(false)
-        xAxis.isGranularityEnabled = false
 
-        val labels = ArrayList<String>()
-        labels.add("200")
-        labels.add("400")
-        labels.add("600")
-        labels.add("800")
-        labels.add("1000")
+        val labels = ArrayList<Int>()
+        labels.add(200)
+        labels.add(400)
+        labels.add(600)
+        labels.add(800)
+        labels.add(1000)
 
         val leftAxis = chart.axisLeft
+        leftAxis.enableGridDashedLine(10F, 10F, 10F)
+        leftAxis.setDrawAxisLine(false)
         leftAxis.axisMinimum = 0F
         leftAxis.axisMaximum = labels.size.toFloat() - 1F
         leftAxis.labelCount = labels.size - 1
-        leftAxis.valueFormatter = object :ValueFormatter() {
+        leftAxis.valueFormatter = object : ValueFormatter() {
             override fun getFormattedValue(value: Float): String {
                 val index = value.toInt()
                 if (index >= 0 && index < labels.size) {
@@ -134,25 +122,34 @@ class AndroidChartActivity : DemoBase(), OnSeekBarChangeListener,
                 return ""
             }
         }
+
+        val rightAxis = chart.axisRight
+        rightAxis.axisMinimum = labels.first().toFloat()
+        rightAxis.axisMaximum = labels.last().toFloat()
+        rightAxis.isEnabled = false
     }
 
-    private fun setData(count: Int, range: Float) {
+    private fun setData(count: Int) {
+        val lowerBound = 200
+        val upperBound = 1000
+
         val values2 = ArrayList<Entry>()
 
         for (i in 0 until count) {
-            val `val` = (Math.random() * range).toFloat() + 450
-            values2.add(Entry(i.toFloat(), `val`))
+            val calendar = Calendar.getInstance()
+            calendar.add(Calendar.DAY_OF_MONTH, i)
+            val futureDate = calendar.get(Calendar.DAY_OF_MONTH)
+            values2.add(Entry(futureDate.toFloat(), Random.nextInt(lowerBound, upperBound).toFloat()))
         }
 
         val values3 = ArrayList<Entry>()
 
 
         for (i in 0 until count) {
-            val random = Math.random()
-            Log.d("CEK", "RAMDOM : $random")
-            Log.d("CEK", "RANGE : $range")
-            val `val` = (random * range).toFloat() + 500
-            values3.add(Entry(i.toFloat(), `val`))
+            val calendar = Calendar.getInstance()
+            calendar.add(Calendar.DAY_OF_MONTH, i)
+            val futureDate = calendar.get(Calendar.DAY_OF_MONTH)
+            values3.add(Entry(futureDate.toFloat(), Random.nextInt(lowerBound, upperBound).toFloat()))
         }
 
         val set2: LineDataSet?
@@ -166,26 +163,9 @@ class AndroidChartActivity : DemoBase(), OnSeekBarChangeListener,
             chart.data.notifyDataChanged()
             chart.notifyDataSetChanged()
         } else {
-            // create a dataset and give it a type
-//            set1 = LineDataSet(values1, "DataSet 1")
-//
-//            set1.axisDependency = AxisDependency.LEFT
-//            set1.color = ColorTemplate.getHoloBlue()
-//            set1.setCircleColor(Color.BLACK)
-//            set1.lineWidth = 2f
-//            set1.circleRadius = 3f
-//            set1.fillAlpha = 65
-//            set1.fillColor = ColorTemplate.getHoloBlue()
-//            set1.highLightColor = Color.rgb(244, 117, 117)
-//            set1.setDrawCircleHole(false)
-
-            //set1.setFillFormatter(new MyFillFormatter(0f));
-            //set1.setDrawHorizontalHighlightIndicator(false);
-            //set1.setVisible(false);
-            //set1.setCircleHoleColor(Color.WHITE);
 
             // create a dataset and give it a type
-            set2 = LineDataSet(values2, "DataSet 2")
+            set2 = LineDataSet(values2, "")
             set2.axisDependency = AxisDependency.RIGHT
             set2.color = ContextCompat.getColor(this, R.color.green)
             set2.setCircleColor(Color.BLACK)
@@ -197,7 +177,7 @@ class AndroidChartActivity : DemoBase(), OnSeekBarChangeListener,
             set2.highLightColor = Color.rgb(244, 117, 117)
 
             //set2.setFillFormatter(new MyFillFormatter(900f));
-            set3 = LineDataSet(values3, "DataSet 3")
+            set3 = LineDataSet(values3, "")
             set3.axisDependency = AxisDependency.RIGHT
             set3.color = ContextCompat.getColor(this, R.color.red)
             set3.setCircleColor(Color.BLACK)
@@ -356,7 +336,7 @@ class AndroidChartActivity : DemoBase(), OnSeekBarChangeListener,
         tvX.text = seekBarX.progress.toString()
         tvY.text = seekBarY.progress.toString()
 
-        setData(seekBarX.progress, seekBarY.progress.toFloat())
+        setData(seekBarX.progress)
 
         // redraw
         chart.invalidate()
