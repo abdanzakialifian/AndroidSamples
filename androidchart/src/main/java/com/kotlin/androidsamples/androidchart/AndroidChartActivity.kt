@@ -14,6 +14,8 @@ import android.widget.SeekBar.OnSeekBarChangeListener
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import com.github.mikephil.charting.charts.LineChart
+import com.github.mikephil.charting.components.LimitLine
+import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.components.YAxis.AxisDependency
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
@@ -42,8 +44,6 @@ class AndroidChartActivity : DemoBase(), OnSeekBarChangeListener,
         super.onCreate(savedInstanceState)
         binding = ActivityAndroidChartBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        title = "LineChartActivity2"
 
         tvX = binding.tvXMax
         tvY = binding.tvYMax
@@ -87,10 +87,17 @@ class AndroidChartActivity : DemoBase(), OnSeekBarChangeListener,
         // get the legend (only possible after setting data)
         val l = chart.legend
         l.isEnabled = false
+        l.stackSpace = 150F
+        l.xEntrySpace = 150F
+        l.yEntrySpace = 150F
 
         val xAxis = chart.xAxis
+        xAxis.position = XAxis.XAxisPosition.BOTTOM
         xAxis.enableGridDashedLine(10f, 10f, 10f)
         xAxis.setDrawAxisLine(false)
+        xAxis.gridColor = ContextCompat.getColor(this, R.color.light_grey)
+        xAxis.textColor = ContextCompat.getColor(this, R.color.grey)
+        xAxis.textSize = 12F
 
         val labels = ArrayList<Int>()
         labels.add(200)
@@ -117,6 +124,10 @@ class AndroidChartActivity : DemoBase(), OnSeekBarChangeListener,
                 return ""
             }
         }
+        chart
+        leftAxis.gridColor = ContextCompat.getColor(this, R.color.light_grey)
+        leftAxis.textColor = ContextCompat.getColor(this, R.color.grey)
+        leftAxis.textSize = 12F
 
         val rightAxis = chart.axisRight
         rightAxis.axisMinimum = labels.first().toFloat()
@@ -173,25 +184,19 @@ class AndroidChartActivity : DemoBase(), OnSeekBarChangeListener,
             set2 = LineDataSet(values2, "")
             set2.axisDependency = AxisDependency.RIGHT
             set2.color = ContextCompat.getColor(this, R.color.green)
-            set2.setCircleColor(Color.BLACK)
-            set2.lineWidth = 2f
-            set2.circleRadius = 3f
-            set2.fillAlpha = 65
-            set2.fillColor = Color.RED
-            set2.setDrawCircleHole(false)
-            set2.highLightColor = Color.rgb(244, 117, 117)
+            set2.setCircleColor(ContextCompat.getColor(this, R.color.orange))
+            set2.lineWidth = 3f
+            set2.circleRadius = 6f
+            set2.circleHoleRadius = 4f
 
             //set2.setFillFormatter(new MyFillFormatter(900f));
             set3 = LineDataSet(values3, "")
             set3.axisDependency = AxisDependency.RIGHT
             set3.color = ContextCompat.getColor(this, R.color.red)
-            set3.setCircleColor(Color.BLACK)
-            set3.lineWidth = 2f
-            set3.circleRadius = 3f
-            set3.fillAlpha = 65
-            set3.fillColor = ColorTemplate.colorWithAlpha(Color.YELLOW, 200)
-            set3.setDrawCircleHole(false)
-            set3.highLightColor = Color.rgb(244, 117, 117)
+            set3.setCircleColor(ContextCompat.getColor(this, R.color.orange))
+            set3.lineWidth = 3f
+            set3.circleRadius = 6f
+            set3.circleHoleRadius = 4f
 
             // create a data object with the data sets
             val data = LineData(set2, set3)
