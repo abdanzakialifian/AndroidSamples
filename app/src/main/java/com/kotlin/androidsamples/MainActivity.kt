@@ -14,11 +14,11 @@ import com.kotlin.androidsamples.databinding.ActivityMainBinding
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
-    private var moduleName = ""
+    private var activityModuleName = ""
 
     private var mySessionId = 0
 
-    private val moduleActivityBackStack by lazy { resources.getString(R.string.module_dynamic_app_launcher) }
+    private var moduleActivityBackStack = ""
 
     private val splitInstallManager by lazy { SplitInstallManagerFactory.create(this) }
 
@@ -53,7 +53,7 @@ class MainActivity : AppCompatActivity() {
 
                 SplitInstallSessionStatus.INSTALLED -> {
                     Log.d(this::class.java.simpleName, "INSTALLED")
-                    navigateToDynamicFeatureModule(moduleName)
+                    navigateToDynamicFeatureModule()
                 }
 
                 SplitInstallSessionStatus.FAILED -> {
@@ -78,21 +78,28 @@ class MainActivity : AppCompatActivity() {
 
         binding.apply {
             btnDynamicAppIcon.setOnClickListener {
-                moduleName = DYNAMIC_APP_LAUNCHER_MODULE
-                navigateToDynamicFeatureModule(moduleName)
+                activityModuleName = DYNAMIC_APP_LAUNCHER_ACTIVITY_MODULE
+                moduleActivityBackStack = resources.getString(R.string.module_dynamic_app_launcher)
+                navigateToDynamicFeatureModule()
             }
             btnMockResponseRetrofit.setOnClickListener {
-                moduleName = MOCK_RESPONSE_RETROFIT_MODULE
-                navigateToDynamicFeatureModule(moduleName)
+                activityModuleName = MOCK_RESPONSE_RETROFIT_ACTIVITY_MODULE
+                moduleActivityBackStack = resources.getString(R.string.module_mock_response_retrofit)
+                navigateToDynamicFeatureModule()
+            }
+            btnAndroidChart.setOnClickListener {
+                activityModuleName = ANDROID_CHART_ACTIVITY_MODULE
+                moduleActivityBackStack = resources.getString(R.string.module_android_chart)
+                navigateToDynamicFeatureModule()
             }
         }
     }
 
-    private fun navigateToDynamicFeatureModule(activityNameWithPackageLocation: String) {
+    private fun navigateToDynamicFeatureModule() {
         try {
             if (splitInstallManager.installedModules.contains(moduleActivityBackStack)) {
                 val intent =
-                    Intent().setClassName(this@MainActivity, activityNameWithPackageLocation)
+                    Intent().setClassName(this@MainActivity, activityModuleName)
                 startActivity(intent)
             } else {
                 initSplitInstallManager()
@@ -133,9 +140,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     companion object {
-        private const val DYNAMIC_APP_LAUNCHER_MODULE =
+        private const val DYNAMIC_APP_LAUNCHER_ACTIVITY_MODULE =
             "com.kotlin.androidsamples.dynamicapplauncher.DynamicAppLauncherActivity"
-        private const val MOCK_RESPONSE_RETROFIT_MODULE =
+        private const val MOCK_RESPONSE_RETROFIT_ACTIVITY_MODULE =
             "com.kotlin.androidsamples.mockresponseretrofit.presentation.MockResponseRetrofitActivity"
+        private const val ANDROID_CHART_ACTIVITY_MODULE =
+            "com.kotlin.androidsamples.androidchart.AndroidChartActivity"
     }
 }

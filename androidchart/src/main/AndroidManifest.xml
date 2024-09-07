@@ -4,7 +4,7 @@
 
     <dist:module
         dist:instant="false"
-        dist:title="@string/title_mock_response_retrofit">
+        dist:title="@string/title_android_chart">
         <dist:delivery>
             <dist:on-demand />
         </dist:delivery>
@@ -12,9 +12,9 @@
         <dist:fusing dist:include="true" />
     </dist:module>
 
-    <application android:name=".presentation.MockResponseRetrofitApp">
+    <application>
         <activity
-            android:name=".presentation.MockResponseRetrofitActivity"
+            android:name=".AndroidChartActivity"
             android:exported="false" />
     </application>
 

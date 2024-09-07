@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="module_dynamic_app_launcher">dynamicapplauncher</string>
+    <string name="module_mock_response_retrofit">mockresponseretrofit</string>
+    <string name="module_android_chart">androidchart</string>
 </resources>

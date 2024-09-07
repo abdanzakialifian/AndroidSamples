@@ -38,4 +38,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/btn_dynamic_app_icon" />
 
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_android_chart"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Android Chart"
+        android:textAllCaps="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btn_mock_response_retrofit" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

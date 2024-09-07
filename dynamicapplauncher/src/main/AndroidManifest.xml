@@ -7,7 +7,7 @@
 
     <dist:module
         dist:instant="false"
-        dist:title="@string/module_dynamic_app_launcher">
+        dist:title="@string/title_dynamic_app_launcher">
         <dist:delivery>
             <dist:on-demand />
         </dist:delivery>

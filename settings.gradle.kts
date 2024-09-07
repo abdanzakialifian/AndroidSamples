@@ -16,6 +16,9 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven {
+            url = uri("https://jitpack.io")
+        }
     }
 }
 
@@ -23,3 +26,4 @@ rootProject.name = "Android Samples"
 include(":app")
 include(":dynamicapplauncher")
 include(":mockresponseretrofit")
+include(":androidchart")
