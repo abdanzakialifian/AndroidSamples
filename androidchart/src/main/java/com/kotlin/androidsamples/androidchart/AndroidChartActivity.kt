@@ -1,20 +1,14 @@
 package com.kotlin.androidsamples.androidchart
 
-import android.Manifest
-import android.content.Intent
-import android.content.pm.PackageManager
+import android.content.Context
+import android.graphics.Canvas
 import android.graphics.Color
-import android.net.Uri
+import android.graphics.Paint
 import android.os.Bundle
-import android.util.Log
-import android.view.Menu
-import android.view.MenuItem
-import android.widget.SeekBar
-import android.widget.SeekBar.OnSeekBarChangeListener
-import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.github.mikephil.charting.charts.LineChart
-import com.github.mikephil.charting.components.LimitLine
+import com.github.mikephil.charting.components.MarkerView
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.components.YAxis.AxisDependency
 import com.github.mikephil.charting.data.Entry
@@ -22,40 +16,29 @@ import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.highlight.Highlight
-import com.github.mikephil.charting.listener.OnChartValueSelectedListener
-import com.github.mikephil.charting.utils.ColorTemplate
+import com.github.mikephil.charting.model.GradientColor
+import com.github.mikephil.charting.utils.MPPointF
 import com.kotlin.androidsamples.androidchart.databinding.ActivityAndroidChartBinding
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 import kotlin.random.Random
 
-class AndroidChartActivity : DemoBase(), OnSeekBarChangeListener,
-    OnChartValueSelectedListener {
+class AndroidChartActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAndroidChartBinding
 
     private lateinit var chart: LineChart
-    private lateinit var seekBarX: SeekBar
-    private lateinit var seekBarY: SeekBar
-    private lateinit var tvX: TextView
-    private lateinit var tvY: TextView
+
+    private var values2: ArrayList<Entry> = ArrayList()
+
+    private var values3: ArrayList<Entry> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAndroidChartBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        tvX = binding.tvXMax
-        tvY = binding.tvYMax
-
-        seekBarX = binding.seekBar1
-        seekBarX.setOnSeekBarChangeListener(this)
-
-        seekBarY = binding.seekBar2
-        seekBarY.setOnSeekBarChangeListener(this)
-
         chart = binding.chart1
-        chart.setOnChartValueSelectedListener(this)
 
         // background color
         chart.setBackgroundColor(Color.WHITE)
@@ -76,20 +59,12 @@ class AndroidChartActivity : DemoBase(), OnSeekBarChangeListener,
         // if disabled, scaling can be done on x- and y-axis separately
         chart.setPinchZoom(true)
 
+        chart.animateX(600)
 
-        // add data
-        seekBarX.progress = 7
-        seekBarY.progress = 30
-
-        chart.animateX(700)
-
+        setData()
 
         // get the legend (only possible after setting data)
-        val l = chart.legend
-        l.isEnabled = false
-        l.stackSpace = 150F
-        l.xEntrySpace = 150F
-        l.yEntrySpace = 150F
+        chart.legend.isEnabled = false
 
         val xAxis = chart.xAxis
         xAxis.position = XAxis.XAxisPosition.BOTTOM
@@ -133,17 +108,24 @@ class AndroidChartActivity : DemoBase(), OnSeekBarChangeListener,
         rightAxis.axisMinimum = labels.first().toFloat()
         rightAxis.axisMaximum = labels.last().toFloat()
         rightAxis.isEnabled = false
+
+        val sets = chart.data.dataSets
+        for (iSet in sets) {
+            val set = iSet as LineDataSet
+            set.mode = LineDataSet.Mode.HORIZONTAL_BEZIER
+        }
+
+        val marker = CustomMarkerView(this)
+        chart.marker = marker
     }
 
-    private fun setData(count: Int) {
+    private fun setData() {
         val lowerBound = 200
         val upperBound = 1000
 
         val calendars = ArrayList<Calendar>()
-        val values2 = ArrayList<Entry>()
-        val values3 = ArrayList<Entry>()
 
-        for (i in 0 until count) {
+        for (i in 0 until 7) {
             val calendar = Calendar.getInstance()
             calendar.add(Calendar.DAY_OF_MONTH, i)
             calendars.add(calendar)
@@ -179,24 +161,27 @@ class AndroidChartActivity : DemoBase(), OnSeekBarChangeListener,
             chart.data.notifyDataChanged()
             chart.notifyDataSetChanged()
         } else {
-
             // create a dataset and give it a type
             set2 = LineDataSet(values2, "")
             set2.axisDependency = AxisDependency.RIGHT
             set2.color = ContextCompat.getColor(this, R.color.green)
-            set2.setCircleColor(ContextCompat.getColor(this, R.color.orange))
             set2.lineWidth = 3f
-            set2.circleRadius = 6f
-            set2.circleHoleRadius = 4f
+            set2.setDrawCircles(false)
+            set2.setDrawValues(false)
+            set2.setDrawFilled(true)
+            set2.fillColor = ContextCompat.getColor(this, R.color.green)
+            set2.fillAlpha = 5
 
             //set2.setFillFormatter(new MyFillFormatter(900f));
             set3 = LineDataSet(values3, "")
             set3.axisDependency = AxisDependency.RIGHT
             set3.color = ContextCompat.getColor(this, R.color.red)
-            set3.setCircleColor(ContextCompat.getColor(this, R.color.orange))
             set3.lineWidth = 3f
-            set3.circleRadius = 6f
-            set3.circleHoleRadius = 4f
+            set3.setDrawCircles(false)
+            set3.setDrawValues(false)
+            set3.setDrawFilled(true)
+            set3.fillColor = ContextCompat.getColor(this, R.color.red)
+            set3.fillAlpha = 5
 
             // create a data object with the data sets
             val data = LineData(set2, set3)
@@ -208,172 +193,43 @@ class AndroidChartActivity : DemoBase(), OnSeekBarChangeListener,
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.line, menu)
-        return true
+    private fun setupPointerChart(lineDataSet: LineDataSet) {
+        lineDataSet.setCircleColor(ContextCompat.getColor(this, R.color.orange))
+        lineDataSet.circleRadius = 6f
+        lineDataSet.circleHoleRadius = 4f
+    }
+}
+
+class CustomMarkerView(context: Context) : MarkerView(context, R.layout.custom_marker_view) {
+
+    private val outerCirclePaint = Paint().apply {
+        color = ContextCompat.getColor(context, R.color.orange)
+        style = Paint.Style.STROKE
+        strokeWidth = 20f
+        isAntiAlias = true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.viewGithub -> {
-                val i = Intent(Intent.ACTION_VIEW)
-                i.setData(Uri.parse("https://github.com/PhilJay/MPAndroidChart/blob/master/MPChartExample/src/com/xxmassdeveloper/mpchartexample/LineChartActivity2.java"))
-                startActivity(i)
-            }
-
-            R.id.actionToggleValues -> {
-                val sets = chart.data
-                    .dataSets
-
-                for (iSet in sets) {
-                    val set = iSet as LineDataSet
-                    set.setDrawValues(!set.isDrawValuesEnabled)
-                }
-
-                chart.invalidate()
-            }
-
-            R.id.actionToggleHighlight -> {
-                if (chart.data != null) {
-                    chart.data.isHighlightEnabled = !chart.data.isHighlightEnabled
-                    chart.invalidate()
-                }
-            }
-
-            R.id.actionToggleFilled -> {
-                val sets = chart.data
-                    .dataSets
-
-                for (iSet in sets) {
-                    val set = iSet as LineDataSet
-                    if (set.isDrawFilledEnabled) set.setDrawFilled(false)
-                    else set.setDrawFilled(true)
-                }
-                chart.invalidate()
-            }
-
-            R.id.actionToggleCircles -> {
-                val sets = chart.data
-                    .dataSets
-
-                for (iSet in sets) {
-                    val set = iSet as LineDataSet
-                    if (set.isDrawCirclesEnabled) set.setDrawCircles(false)
-                    else set.setDrawCircles(true)
-                }
-                chart.invalidate()
-            }
-
-            R.id.actionToggleCubic -> {
-                val sets = chart.data
-                    .dataSets
-
-                for (iSet in sets) {
-                    val set = iSet as LineDataSet
-                    set.mode = if (set.mode == LineDataSet.Mode.CUBIC_BEZIER
-                    ) LineDataSet.Mode.LINEAR
-                    else LineDataSet.Mode.CUBIC_BEZIER
-                }
-                chart.invalidate()
-            }
-
-            R.id.actionToggleStepped -> {
-                val sets = chart.data
-                    .dataSets
-
-                for (iSet in sets) {
-                    val set = iSet as LineDataSet
-                    set.mode = if (set.mode == LineDataSet.Mode.STEPPED
-                    ) LineDataSet.Mode.LINEAR
-                    else LineDataSet.Mode.STEPPED
-                }
-                chart.invalidate()
-            }
-
-            R.id.actionToggleHorizontalCubic -> {
-                val sets = chart.data
-                    .dataSets
-
-                for (iSet in sets) {
-                    val set = iSet as LineDataSet
-                    set.mode = if (set.mode == LineDataSet.Mode.HORIZONTAL_BEZIER
-                    ) LineDataSet.Mode.LINEAR
-                    else LineDataSet.Mode.HORIZONTAL_BEZIER
-                }
-                chart.invalidate()
-            }
-
-            R.id.actionTogglePinch -> {
-                if (chart.isPinchZoomEnabled) chart.setPinchZoom(false)
-                else chart.setPinchZoom(true)
-
-                chart.invalidate()
-            }
-
-            R.id.actionToggleAutoScaleMinMax -> {
-                chart.isAutoScaleMinMaxEnabled = !chart.isAutoScaleMinMaxEnabled
-                chart.notifyDataSetChanged()
-            }
-
-            R.id.animateX -> {
-                chart.animateX(2000)
-            }
-
-            R.id.animateY -> {
-                chart.animateY(2000)
-            }
-
-            R.id.animateXY -> {
-                chart.animateXY(2000, 2000)
-            }
-
-            R.id.actionSave -> {
-                if (ContextCompat.checkSelfPermission(
-                        this,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE
-                    ) == PackageManager.PERMISSION_GRANTED
-                ) {
-                    saveToGallery()
-                } else {
-                    requestStoragePermission(chart)
-                }
-            }
-        }
-        return true
+    private val innerCirclePaint = Paint().apply {
+        color = Color.WHITE
+        style = Paint.Style.FILL
+        isAntiAlias = true
     }
 
-    override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-        tvX.text = seekBarX.progress.toString()
-        tvY.text = seekBarY.progress.toString()
-
-        setData(seekBarX.progress)
-
-        // redraw
-        chart.invalidate()
+    override fun refreshContent(entry: Entry?, highlight: Highlight?) {
+        super.refreshContent(entry, highlight)
+        // Customize your marker view here
+//        textView.text = "Value: ${entry?.y}"
     }
 
-    override fun saveToGallery() {
-        saveToGallery(chart, "LineChartActivity2")
+    override fun draw(canvas: Canvas, posX: Float, posY: Float) {
+        super.draw(canvas, posX, posY)
+        // Draw a circle at the marker position
+        canvas.drawCircle(posX, posY, 20f, outerCirclePaint)
+        canvas.drawCircle(posX, posY, 20f, innerCirclePaint)
     }
 
-    override fun onValueSelected(e: Entry, h: Highlight) {
-        Log.i("Entry selected", e.toString())
-
-        chart.centerViewToAnimated(
-            e.x, e.y, chart.data.getDataSetByIndex(h.dataSetIndex)
-                .axisDependency, 500
-        )
-        //chart.zoomAndCenterAnimated(2.5f, 2.5f, e.getX(), e.getY(), chart.getData().getDataSetByIndex(dataSetIndex)
-        // .getAxisDependency(), 1000);
-        //chart.zoomAndCenterAnimated(1.8f, 1.8f, e.getX(), e.getY(), chart.getData().getDataSetByIndex(dataSetIndex)
-        // .getAxisDependency(), 1000);
+    override fun getOffset(): MPPointF {
+        // Adjust the marker view's offset
+        return MPPointF(-width / 2f, -height.toFloat())
     }
-
-    override fun onNothingSelected() {
-        Log.i("Nothing selected", "Nothing selected.")
-    }
-
-    override fun onStartTrackingTouch(seekBar: SeekBar?) {}
-
-    override fun onStopTrackingTouch(seekBar: SeekBar?) {}
 }
