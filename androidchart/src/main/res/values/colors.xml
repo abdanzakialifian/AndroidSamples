@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="green">#02AB50</color>
+    <color name="green15">#2602AB50</color>
     <color name="red">#780000</color>
+    <color name="red15">#26780000</color>
     <color name="light_grey">#E1E3E8</color>
     <color name="orange">#FFA84A</color>
     <color name="grey">#848A9C</color>
