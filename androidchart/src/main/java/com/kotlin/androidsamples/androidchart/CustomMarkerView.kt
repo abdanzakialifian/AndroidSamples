@@ -37,14 +37,18 @@ class CustomMarkerView(context: Context) : MarkerView(context, R.layout.custom_m
     override fun refreshContent(entry: Entry?, highlight: Highlight?) {
         super.refreshContent(entry, highlight)
         // Customize your marker view here
-        binding.tvDate.text = entry?.data.toString()
+        binding.tvDate.text = entry?.data as? String
     }
 
     override fun draw(canvas: Canvas, posX: Float, posY: Float) {
-        super.draw(canvas, posX, posY)
         // Draw a circle at the marker position
         canvas.drawCircle(posX, posY, 14f, outerCirclePaint)
         canvas.drawCircle(posX, posY, 14f, innerCirclePaint)
+        val offset = getOffsetForDrawingAtPoint(posX, posY)
+
+        // translate to the correct position and draw
+        canvas.translate(posX + offset.x, 0F)
+        draw(canvas)
     }
 
     override fun getOffset(): MPPointF {
