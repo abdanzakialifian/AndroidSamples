@@ -13,10 +13,10 @@ import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.utils.MPPointD
 import com.github.mikephil.charting.utils.MPPointF
-import com.kotlin.androidsamples.androidchart.databinding.CustomMarkerViewBinding
+import com.kotlin.androidsamples.androidchart.databinding.CustomMarkerViewWithPointerBinding
 
 /**
- * CustomMarkerView is a subclass of [MarkerView] used to display a custom tooltip with two circles
+ * CustomMarkerViewWithPointer is a subclass of [MarkerView] used to display a custom tooltip with two circles
  * (an outer stroke and inner fill) at specific points on a line chart.
  * This marker view binds data to a custom layout and draws circles at the location of the selected entries
  * for two line data sets.
@@ -24,13 +24,13 @@ import com.kotlin.androidsamples.androidchart.databinding.CustomMarkerViewBindin
  * @constructor
  * @param context the context in which the view is running.
  */
-class CustomMarkerView(context: Context) : MarkerView(context, R.layout.custom_marker_view) {
+class CustomMarkerViewWithPointer(context: Context) : MarkerView(context, R.layout.custom_marker_view_with_pointer) {
     // Binds the custom marker view layout using view binding
-    private val binding: CustomMarkerViewBinding
+    private val binding: CustomMarkerViewWithPointerBinding
 
     init {
         val inflater = LayoutInflater.from(context)
-        binding = CustomMarkerViewBinding.inflate(inflater, this, true)
+        binding = CustomMarkerViewWithPointerBinding.inflate(inflater, this, true)
     }
 
     // Paint object for the outer circle (stroke)
