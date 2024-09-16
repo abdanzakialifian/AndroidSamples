@@ -275,7 +275,7 @@ class AndroidChartActivity : AppCompatActivity() {
             xAxis.position = XAxis.XAxisPosition.BOTTOM
             xAxis.enableGridDashedLine(10f, 10f, 10f)
             xAxis.setDrawAxisLine(false)
-            xAxis.gridColor = ContextCompat.getColor(this@AndroidChartActivity, R.color.red)
+            xAxis.gridColor = ContextCompat.getColor(this@AndroidChartActivity, R.color.grey)
             xAxis.textColor = ContextCompat.getColor(this@AndroidChartActivity, R.color.grey)
             xAxis.textSize = 12F
 
@@ -305,7 +305,7 @@ class AndroidChartActivity : AppCompatActivity() {
                 }
             }
             leftAxis.gridColor =
-                ContextCompat.getColor(this@AndroidChartActivity, R.color.red)
+                ContextCompat.getColor(this@AndroidChartActivity, R.color.grey)
             leftAxis.textColor = ContextCompat.getColor(this@AndroidChartActivity, R.color.grey)
             leftAxis.textSize = 12F
 
@@ -624,8 +624,10 @@ class AndroidChartActivity : AppCompatActivity() {
                 lineDataSet.lineWidth = 3f
                 lineDataSet.setDrawCircles(false)
                 lineDataSet.setDrawValues(false)
-                lineDataSet.setDrawFilled(false)
-//                lineDataSet.mode = LineDataSet.Mode.HORIZONTAL_BEZIER
+                lineDataSet.setDrawFilled(true)
+                lineDataSet.fillColor = ContextCompat.getColor(this@AndroidChartActivity, R.color.green)
+                lineDataSet.fillAlpha = 10
+                lineDataSet.mode = LineDataSet.Mode.HORIZONTAL_BEZIER
 
                 //set2.setFillFormatter(new MyFillFormatter(900f));
                 lineDataSet2 = LineDataSet(entryList2, "")
@@ -634,8 +636,10 @@ class AndroidChartActivity : AppCompatActivity() {
                 lineDataSet2.lineWidth = 3f
                 lineDataSet2.setDrawCircles(false)
                 lineDataSet2.setDrawValues(false)
-                lineDataSet2.setDrawFilled(false)
-//                lineDataSet2.mode = LineDataSet.Mode.HORIZONTAL_BEZIER
+                lineDataSet2.setDrawFilled(true)
+                lineDataSet2.fillColor = ContextCompat.getColor(this@AndroidChartActivity, R.color.red)
+                lineDataSet2.fillAlpha = 10
+                lineDataSet2.mode = LineDataSet.Mode.HORIZONTAL_BEZIER
 
                 // create a data object with the data sets
                 val data = LineData(lineDataSet, lineDataSet2)
