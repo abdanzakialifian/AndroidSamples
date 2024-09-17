@@ -271,6 +271,9 @@ class AndroidChartActivity : AppCompatActivity() {
             // get the legend (only possible after setting data)
             chart4.legend.isEnabled = false
 
+            chart4.extraTopOffset = 70F
+            chart4.extraRightOffset = 30f
+
             val xAxis = chart4.xAxis
             xAxis.position = XAxis.XAxisPosition.BOTTOM
             xAxis.enableGridDashedLine(10f, 10f, 10f)

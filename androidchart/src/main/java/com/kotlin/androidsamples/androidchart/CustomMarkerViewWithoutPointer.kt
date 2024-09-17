@@ -38,9 +38,7 @@ class CustomMarkerViewWithoutPointer(context: Context) :
         binding.tooltipView.setEntry(entryBuy, entrySell)
     }
 
-    override fun getOffset(): MPPointF {
-        return MPPointF(-(width  / 2).toFloat(), -height.toFloat())
-    }
+    override fun getOffset(): MPPointF = MPPointF(-(width / 2).toFloat(), -height.toFloat())
 
     private fun getLineDataSet(index: Int): LineDataSet? {
         return chartView.data.getDataSetByIndex(index) as? LineDataSet
