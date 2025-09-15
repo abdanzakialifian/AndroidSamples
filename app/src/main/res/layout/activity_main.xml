@@ -48,4 +48,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/btn_mock_response_retrofit" />
 
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_web_view_callback"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="WebView Callback"
+        android:textAllCaps="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btn_android_chart" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

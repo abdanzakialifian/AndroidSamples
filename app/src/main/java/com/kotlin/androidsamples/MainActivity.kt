@@ -92,6 +92,11 @@ class MainActivity : AppCompatActivity() {
                 moduleActivityBackStack = resources.getString(R.string.module_android_chart)
                 navigateToDynamicFeatureModule()
             }
+            btnWebViewCallback.setOnClickListener {
+                activityModuleName = WEB_VIEW_CALLBACK_MODULE
+                moduleActivityBackStack = resources.getString(R.string.module_web_view_callback)
+                navigateToDynamicFeatureModule()
+            }
         }
     }
 
@@ -146,5 +151,7 @@ class MainActivity : AppCompatActivity() {
             "com.kotlin.androidsamples.mockresponseretrofit.presentation.MockResponseRetrofitActivity"
         private const val ANDROID_CHART_ACTIVITY_MODULE =
             "com.kotlin.androidsamples.androidchart.AndroidChartActivity"
+        private const val WEB_VIEW_CALLBACK_MODULE =
+            "com.kotlin.androidsamples.webviewcallback.WebViewCallbackActivity"
     }
 }

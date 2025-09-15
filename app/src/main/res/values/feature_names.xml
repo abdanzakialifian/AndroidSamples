@@ -3,4 +3,5 @@
     <string name="module_dynamic_app_launcher">dynamicapplauncher</string>
     <string name="module_mock_response_retrofit">mockresponseretrofit</string>
     <string name="module_android_chart">androidchart</string>
+    <string name="module_web_view_callback">webviewcallback</string>
 </resources>

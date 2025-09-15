@@ -3,4 +3,5 @@
     <string name="title_dynamic_app_launcher">Dynamic App Launcher</string>
     <string name="title_mock_response_retrofit">Mock Response Retrofit</string>
     <string name="title_android_chart">Android Chart</string>
+    <string name="title_web_view_callback">WebView Callback</string>
 </resources>
