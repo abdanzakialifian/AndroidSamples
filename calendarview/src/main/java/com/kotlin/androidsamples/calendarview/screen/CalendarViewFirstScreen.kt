@@ -58,6 +58,7 @@ fun CalendarViewFirstScreen() {
                     .background(Color.DarkGray)
                     .padding(horizontal = 8.dp, vertical = 12.dp),
                 currentMonth = visibleMonth.yearMonth,
+                isHorizontal = true,
                 goToPrevious = {
                     coroutineScope.launch {
                         state.animateScrollToMonth(state.firstVisibleMonth.yearMonth.previousMonth)

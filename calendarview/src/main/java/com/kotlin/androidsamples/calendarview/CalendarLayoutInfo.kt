@@ -5,7 +5,7 @@ import androidx.compose.foundation.lazy.LazyListLayoutInfo
 
 class CalendarLayoutInfo(info: LazyListLayoutInfo, private val month: (Int) -> CalendarMonth) : LazyListLayoutInfo by info {
     val visibleMonthsInfo: List<CalendarItemInfo>
-        get() = visibleMonthsInfo.map {
+        get() = visibleItemsInfo.map {
             CalendarItemInfo(it, month(it.index))
         }
 }
