@@ -4,4 +4,5 @@
     <string name="module_mock_response_retrofit">mockresponseretrofit</string>
     <string name="module_android_chart">androidchart</string>
     <string name="module_web_view_callback">webviewcallback</string>
+    <string name="module_calendar_view">calendarview</string>
 </resources>

@@ -97,6 +97,11 @@ class MainActivity : AppCompatActivity() {
                 moduleActivityBackStack = resources.getString(R.string.module_web_view_callback)
                 navigateToDynamicFeatureModule()
             }
+            btnCalendarView.setOnClickListener {
+                activityModuleName = CALENDAR_VIEW_MODULE
+                moduleActivityBackStack = resources.getString(R.string.module_calendar_view)
+                navigateToDynamicFeatureModule()
+            }
         }
     }
 
@@ -153,5 +158,6 @@ class MainActivity : AppCompatActivity() {
             "com.kotlin.androidsamples.androidchart.AndroidChartActivity"
         private const val WEB_VIEW_CALLBACK_MODULE =
             "com.kotlin.androidsamples.webviewcallback.WebViewCallbackActivity"
+        private const val CALENDAR_VIEW_MODULE = "com.kotlin.androidsamples.calendarview.CalendarViewActivity"
     }
 }
