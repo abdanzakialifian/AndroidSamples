@@ -32,12 +32,9 @@ android {
 
 dependencies {
     implementation(project(":app"))
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.material)
-    implementation(libs.androidx.activity)
-    implementation(libs.androidx.constraintlayout)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
+    compileOnly(libs.androidx.core.ktx)
+    compileOnly(libs.androidx.appcompat)
+    compileOnly(libs.material)
+    compileOnly(libs.androidx.activity)
+    compileOnly(libs.androidx.constraintlayout)
 }
