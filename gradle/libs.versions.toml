@@ -1,5 +1,6 @@
 [versions]
 agp = "8.5.1"
+desugar_jdk_libs = "2.1.2"
 featureDelivery = "2.1.0"
 featureDeliveryKtx = "2.1.0"
 kotlin = "1.9.0"
@@ -27,6 +28,7 @@ navigationCompose = "2.6.0"
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycleViewmodelKtx" }
+desugar_jdk_libs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugar_jdk_libs" }
 feature-delivery-ktx = { module = "com.google.android.play:feature-delivery-ktx", version.ref = "featureDeliveryKtx" }
 feature-delivery = { module = "com.google.android.play:feature-delivery", version.ref = "featureDelivery" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
