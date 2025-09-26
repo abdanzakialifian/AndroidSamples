@@ -7,12 +7,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshotFlow
 import com.kotlin.androidsamples.calendarview.Utils.completelyVisibleMonth
 import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.firstOrNull
 import java.time.DayOfWeek
 import java.time.LocalDate
-import java.time.Month
 import java.time.YearMonth
-import java.time.format.TextStyle
 import java.time.temporal.WeekFields
 import java.util.Locale
 
@@ -71,20 +68,6 @@ object Utils {
                 visibleItemsInfo.map { it.month }
             }
         }
-
-    fun YearMonth.displayText(short: Boolean = false): String = "${month.displayText(short)} $year"
-
-    fun Month.displayText(short: Boolean = true): String {
-        val style = if (short) TextStyle.SHORT else TextStyle.FULL
-        return getDisplayName(style, Locale.ENGLISH)
-    }
-
-    fun DayOfWeek.displayText(uppercase: Boolean = false, narrow: Boolean = false): String {
-        val style = if (narrow) TextStyle.NARROW else TextStyle.SHORT
-        return getDisplayName(style, Locale.ENGLISH).let { value ->
-            if (uppercase) value.uppercase(Locale.ENGLISH) else value
-        }
-    }
 }
 
 @Composable

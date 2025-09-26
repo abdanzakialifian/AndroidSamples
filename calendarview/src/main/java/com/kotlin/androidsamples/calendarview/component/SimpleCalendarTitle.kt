@@ -28,14 +28,16 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.kotlin.androidsamples.calendarview.Utils.displayText
+import com.kotlin.androidsamples.calendarview.ui.theme.Black4
+import com.kotlin.androidsamples.calendarview.ui.theme.Marron3
 import java.time.YearMonth
+import java.time.format.TextStyle
+import java.util.Locale
 
 @Composable
 fun SimpleCalendarTitle(
     currentMonth: YearMonth,
     modifier: Modifier = Modifier,
-    isHorizontal: Boolean = false,
     goToPrevious: () -> Unit,
     goToNext: () -> Unit,
 ) {
@@ -46,22 +48,21 @@ fun SimpleCalendarTitle(
         CalendarNavigationIcon(
             imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
             contentDescription = "Previous",
-            isHorizontal = isHorizontal,
             onClick = goToPrevious,
         )
         Text(
             modifier = Modifier
                 .weight(1f)
                 .align(Alignment.CenterVertically),
-            text = currentMonth.displayText(),
+            text = "${currentMonth.month.getDisplayName(TextStyle.FULL, Locale.getDefault())} ${currentMonth.year}",
             fontSize = 22.sp,
             textAlign = TextAlign.Center,
-            fontWeight = FontWeight.Medium
+            fontWeight = FontWeight.Medium,
+            color = Black4
         )
         CalendarNavigationIcon(
             imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
             contentDescription = "Next",
-            isHorizontal = isHorizontal,
             onClick = goToNext,
         )
     }
@@ -72,7 +73,6 @@ private fun CalendarNavigationIcon(
     imageVector: ImageVector,
     modifier: Modifier = Modifier,
     contentDescription: String? = null,
-    isHorizontal: Boolean = false,
     onClick: () -> Unit
 ) {
     Box(
@@ -83,7 +83,7 @@ private fun CalendarNavigationIcon(
             .clickable(role = Role.Button, onClick = onClick)
     ) {
         val rotation by animateFloatAsState(
-            targetValue = if (isHorizontal) 0f else 90f,
+            targetValue = 0f,
             label = "CalendarNavigationIconAnimation"
         )
         Icon(
@@ -93,6 +93,7 @@ private fun CalendarNavigationIcon(
                 .align(Alignment.Center)
                 .rotate(rotation),
             imageVector = imageVector,
+            tint = Marron3,
             contentDescription = contentDescription
         )
     }

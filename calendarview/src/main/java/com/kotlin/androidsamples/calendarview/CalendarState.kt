@@ -1,6 +1,5 @@
 package com.kotlin.androidsamples.calendarview
 
-import android.util.Log
 import androidx.compose.foundation.MutatePriority
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.ScrollScope
@@ -153,7 +152,6 @@ class CalendarState(
 
     private fun getScrollIndex(month: YearMonth): Int? {
         if (month !in startMonth..endMonth) {
-            Log.d("CalendarState", "Attempting to scroll out of range: $month")
             return null
         }
         return getMonthIndex(startMonth, month)
