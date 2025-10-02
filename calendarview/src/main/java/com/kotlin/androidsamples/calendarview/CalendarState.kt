@@ -1,10 +1,8 @@
 package com.kotlin.androidsamples.calendarview
 
 import androidx.compose.foundation.MutatePriority
-import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.ScrollScope
 import androidx.compose.foundation.gestures.ScrollableState
-import androidx.compose.foundation.interaction.InteractionSource
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
@@ -15,11 +13,7 @@ import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import com.kotlin.androidsamples.calendarview.Utils.daysUntil
-import com.kotlin.androidsamples.calendarview.Utils.indexOfFirstOrNull
-import com.kotlin.androidsamples.calendarview.Utils.positionYearMonth
 import java.time.DayOfWeek
-import java.time.LocalDate
 import java.time.YearMonth
 
 @Stable
@@ -78,16 +72,10 @@ class CalendarState(
 
     val firstVisibleMonth: CalendarMonth by derivedStateOf { store[listState.firstVisibleItemIndex] }
 
-    val lastVisibleMonth: CalendarMonth by derivedStateOf { store[listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0] }
-
     val layoutInfo: CalendarLayoutInfo
         get() = CalendarLayoutInfo(listState.layoutInfo) { index ->
             store[index]
         }
-
-    val interactionSource: InteractionSource get() = listState.interactionSource
-
-    internal val placementInfo = ItemPlacementInfo()
 
     internal var calendarInfo by mutableStateOf(CalendarInfo(indexCount = 0))
 
@@ -114,40 +102,8 @@ class CalendarState(
         )
     }
 
-    suspend fun scrollToMonth(month: YearMonth) {
-        listState.scrollToItem(getScrollIndex(month) ?: return)
-    }
-
     suspend fun animateScrollToMonth(month: YearMonth) {
         listState.animateScrollToItem(getScrollIndex(month) ?: return)
-    }
-
-    suspend fun scrollToDate(date: LocalDate, position: DayPosition = DayPosition.MonthDate) {
-        scrollToDay(CalendarDay(date, position))
-    }
-
-    suspend fun animateScrollToDate(date: LocalDate, position: DayPosition = DayPosition.MonthDate) {
-        animateScrollToDay(CalendarDay(date, position))
-    }
-
-    suspend fun scrollToDay(day: CalendarDay) {
-        scrollToDay(day, animate = false)
-    }
-
-    suspend fun animateScrollToDay(day: CalendarDay) {
-        scrollToDay(day, animate = true)
-    }
-
-    private suspend fun scrollToDay(day: CalendarDay, animate: Boolean) {
-        val monthIndex = getScrollIndex(day.positionYearMonth) ?: return
-        val weeksOfMonth = store[monthIndex].weekDays
-        val dayIndex = when (layoutInfo.orientation) {
-            Orientation.Vertical -> weeksOfMonth.indexOfFirstOrNull { it.contains(day) }
-            Orientation.Horizontal -> firstDayOfWeek.daysUntil(day.date.dayOfWeek)
-        } ?: return
-        val dayInfo = placementInfo.awaitFirstDayOffsetAndSize(layoutInfo.orientation) ?: return
-        val scrollOffset = dayInfo.offset + dayInfo.size * dayIndex
-        if (animate) listState.animateScrollToItem(monthIndex, scrollOffset) else listState.scrollToItem(monthIndex, scrollOffset)
     }
 
     private fun getScrollIndex(month: YearMonth): Int? {

@@ -13,19 +13,12 @@ import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Stable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
-import androidx.compose.ui.layout.LayoutCoordinates
-import androidx.compose.ui.layout.onPlaced
 import androidx.compose.ui.unit.dp
 import com.kotlin.androidsamples.calendarview.CalendarDay
 import com.kotlin.androidsamples.calendarview.CalendarMonth
 import com.kotlin.androidsamples.calendarview.ContentHeightMode
-import com.kotlin.androidsamples.calendarview.ItemCoordinates
 import com.kotlin.androidsamples.calendarview.ui.theme.Grey2
 
 internal fun LazyListScope.CalendarMonths(
@@ -37,7 +30,6 @@ internal fun LazyListScope.CalendarMonths(
     monthBody: (@Composable ColumnScope.(CalendarMonth, content: @Composable () -> Unit) -> Unit)?,
     monthFooter: (@Composable ColumnScope.(CalendarMonth) -> Unit)?,
     monthContainer: (@Composable LazyItemScope.(CalendarMonth, container: @Composable () -> Unit) -> Unit)?,
-    onItemPlaced: (itemCoordinates: ItemCoordinates) -> Unit,
 ) {
     items(
         count = monthCount,
@@ -51,11 +43,7 @@ internal fun LazyListScope.CalendarMonths(
             ContentHeightMode.FILL -> true
         }
         val hasMonthContainer = monthContainer != null
-        val currentOnItemPlaced by rememberUpdatedState(onItemPlaced)
-        val itemCoordinatesStore = remember(month.yearMonth) {
-            ItemCoordinatesStore(currentOnItemPlaced)
-        }
-        Box(Modifier.onPlaced(itemCoordinatesStore::onItemRootPlaced)) {
+        Box {
             monthContainer.or(defaultMonthContainer)(month) {
                 Column(
                     modifier = Modifier
@@ -91,12 +79,6 @@ internal fun LazyListScope.CalendarMonths(
                                                 .weight(1f)
                                                 .padding(if (row > 0) 4.dp else 0.dp)
                                                 .clipToBounds()
-                                                .onFirstDayPlaced(
-                                                    dateRow = row,
-                                                    dateColumn = column,
-                                                    onFirstDayPlaced = itemCoordinatesStore::onFirstDayPlaced
-
-                                                )
                                         ) {
                                             dayContent(day)
                                         }
@@ -112,39 +94,6 @@ internal fun LazyListScope.CalendarMonths(
         }
     }
 }
-
-@Stable
-internal class ItemCoordinatesStore(private val onItemPlaced: (itemCoordinates: ItemCoordinates) -> Unit) {
-    private var itemRootCoordinates: LayoutCoordinates? = null
-
-    private var firstDayCoordinates: LayoutCoordinates? = null
-
-    fun onItemRootPlaced(coordinates: LayoutCoordinates) {
-        itemRootCoordinates = coordinates
-        check()
-    }
-
-    fun onFirstDayPlaced(coordinates: LayoutCoordinates) {
-        firstDayCoordinates = coordinates
-        check()
-    }
-
-    private fun check() {
-        val itemRootCoordinates = itemRootCoordinates ?: return
-        val firstDayCoordinates = firstDayCoordinates ?: return
-        val itemCoordinates = ItemCoordinates(
-            itemRootCoordinates = itemRootCoordinates,
-            firstDayCoordinates = firstDayCoordinates
-        )
-        onItemPlaced(itemCoordinates)
-    }
-}
-
-private fun Modifier.onFirstDayPlaced(
-    dateRow: Int,
-    dateColumn: Int,
-    onFirstDayPlaced: (coordinates: LayoutCoordinates) -> Unit
-): Modifier = if (dateRow == 0 && dateColumn == 0) onPlaced(onFirstDayPlaced) else this
 
 private val defaultMonthContainer: @Composable LazyItemScope.(CalendarMonth, container: @Composable () -> Unit) -> Unit =
     { _, container -> container() }

@@ -47,7 +47,6 @@ fun Calendar(
             monthBody = monthBody,
             monthFooter = monthFooter,
             monthContainer = monthContainer,
-            onItemPlaced = state.placementInfo::onItemPlaced
         )
     }
 }

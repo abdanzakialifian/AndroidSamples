@@ -38,18 +38,6 @@ object Utils {
 
     fun DayOfWeek.daysUntil(other: DayOfWeek): Int = (7 + (other.ordinal - ordinal)) % 7
 
-    val CalendarDay.positionYearMonth: YearMonth
-        get() = when (position) {
-            DayPosition.InDate -> date.yearMonth.nextMonth
-            DayPosition.MonthDate -> date.yearMonth
-            DayPosition.OutDate -> date.yearMonth.previousMonth
-        }
-
-    inline fun <T> Iterable<T>.indexOfFirstOrNull(predicate: (T) -> Boolean): Int? {
-        val result = indexOfFirst(predicate)
-        return if (result == -1) null else result
-    }
-
     val CalendarLayoutInfo.completelyVisibleMonth: List<CalendarMonth>
         get() {
             val visibleItemsInfo = visibleMonthsInfo.toMutableList()
