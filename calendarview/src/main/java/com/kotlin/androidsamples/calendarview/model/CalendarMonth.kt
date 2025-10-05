@@ -1,7 +1,6 @@
 package com.kotlin.androidsamples.calendarview.model
 
 import androidx.compose.runtime.Immutable
-import com.kotlin.androidsamples.calendarview.model.CalendarDay
 import java.io.Serializable
 import java.time.YearMonth
 

@@ -15,7 +15,7 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.kotlin.androidsamples.calendarview.OutDateStyle
+import com.kotlin.androidsamples.calendarview.enum.OutDateStyle
 import com.kotlin.androidsamples.calendarview.Utils
 import com.kotlin.androidsamples.calendarview.component.Calendar
 import com.kotlin.androidsamples.calendarview.component.CalendarTitle
@@ -42,27 +42,24 @@ fun CalendarViewFirstScreen() {
 
     var selectedDate by remember { mutableStateOf<LocalDate?>(null) }
 
+    val coroutineScope = rememberCoroutineScope()
+
     val state = rememberCalendarState(
         startMonth = startMonth,
         endMonth = endMonth,
         firstDayOfWeek = daysOfWeek.first(),
         firstVisibleMonth = currentMonth,
-        outDateStyle = OutDateStyle.EndOfGrid
+        outDateStyle = OutDateStyle.EndOfRow
     )
 
-    val coroutineScope = rememberCoroutineScope()
-
     var visibleMonth by remember { mutableStateOf(state.firstVisibleMonth) }
-
-    LaunchedEffect(visibleMonth) {
-        selectedDate = null
-    }
 
     LaunchedEffect(state) {
         snapshotFlow { state.layoutInfo.completelyVisibleMonth.firstOrNull() }
             .filterNotNull()
             .collect { month ->
                 visibleMonth = month
+                selectedDate = null
             }
     }
 

@@ -19,7 +19,6 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -27,9 +26,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.kotlin.androidsamples.calendarview.model.CalendarDay
 import com.kotlin.androidsamples.calendarview.CalendarState
-import com.kotlin.androidsamples.calendarview.DayPosition
+import com.kotlin.androidsamples.calendarview.enum.DayPosition
 import com.kotlin.androidsamples.calendarview.Utils
 import com.kotlin.androidsamples.calendarview.rememberCalendarState
 import com.kotlin.androidsamples.calendarview.ui.theme.Black5
@@ -61,9 +59,20 @@ fun Calendar(
         ) { offset ->
             val month = state.store[offset]
             Column(modifier = Modifier.fillParentMaxWidth()) {
-                Day(dayOfWeeks)
+                Row(modifier = modifier.fillMaxWidth()) {
+                    for (dayOfWeek in dayOfWeeks) {
+                        Text(
+                            modifier = Modifier.weight(1f),
+                            textAlign = TextAlign.Center,
+                            fontSize = 12.sp,
+                            color = if (dayOfWeek == DayOfWeek.SUNDAY) Red2 else Black5,
+                            text = dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.getDefault()).uppercase(),
+                            fontWeight = FontWeight.Light
+                        )
+                    }
+                }
 
-                Column(modifier = Modifier.fillMaxWidth()) {
+                Column(modifier = Modifier.fillMaxWidth().padding(bottom = 10.dp)) {
                     month.weekDays.forEachIndexed { row, week ->
                         Row(modifier = Modifier.fillMaxWidth()) {
                             week.forEachIndexed { column, day ->
@@ -71,12 +80,23 @@ fun Calendar(
                                     modifier = Modifier
                                         .weight(1f)
                                         .padding(4.dp)
+                                        .background(
+                                            color = if (selectedDate == day.date) SoftPeach else Color.Transparent,
+                                            shape = RoundedCornerShape(4.dp)
+                                        )
+                                        .clickable {
+                                            onDateClicked(day.date)
+                                        }
                                 ) {
                                     if (day.position == DayPosition.MonthDate) {
-                                        Date(
-                                            day = day,
-                                            isSelectedDate = selectedDate == day.date,
-                                            onClick = onDateClicked,
+                                        Text(
+                                            modifier = Modifier
+                                                .aspectRatio(1f)
+                                                .padding(top = 3.dp, end = 4.dp),
+                                            textAlign = TextAlign.Center,
+                                            text = day.date.dayOfMonth.toString(),
+                                            color = if (day.date.dayOfWeek == DayOfWeek.SUNDAY) Red2 else Black5,
+                                            fontSize = 12.sp,
                                         )
                                     }
                                 }
@@ -87,54 +107,6 @@ fun Calendar(
                 }
             }
         }
-    }
-}
-
-@Composable
-fun Day(dayOfWeeks: List<DayOfWeek>, modifier: Modifier = Modifier) {
-    Row(modifier = modifier.fillMaxWidth()) {
-        for (dayOfWeek in dayOfWeeks) {
-            Text(
-                modifier = Modifier.weight(1f),
-                textAlign = TextAlign.Center,
-                fontSize = 12.sp,
-                color = if (dayOfWeek == DayOfWeek.SUNDAY) Red2 else Black5,
-                text = dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.getDefault()).uppercase(),
-                fontWeight = FontWeight.Light
-            )
-        }
-    }
-}
-
-@Composable
-private fun Date(
-    day: CalendarDay,
-    isSelectedDate: Boolean,
-    onClick: (LocalDate) -> Unit,
-) {
-    Box(
-        modifier = Modifier
-            .aspectRatio(1f)
-            .background(
-                color = if (isSelectedDate) SoftPeach else Color.Transparent,
-                shape = RoundedCornerShape(4.dp)
-            )
-            .padding(4.dp)
-            .clickable(
-                enabled = day.position == DayPosition.MonthDate,
-                onClick = {
-                    onClick(day.date)
-                }
-            )
-    ) {
-        Text(
-            modifier = Modifier
-                .align(Alignment.TopCenter)
-                .padding(top = 3.dp, end = 4.dp),
-            text = day.date.dayOfMonth.toString(),
-            color = if (day.date.dayOfWeek == DayOfWeek.SUNDAY) Red2 else Black5,
-            fontSize = 12.sp,
-        )
     }
 }
 

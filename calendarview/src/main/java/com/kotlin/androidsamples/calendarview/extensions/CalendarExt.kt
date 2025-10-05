@@ -28,9 +28,9 @@ val CalendarLayoutInfo.completelyVisibleMonth: List<CalendarMonth>
         }
     }
 
-fun YearMonth.asStartMonth(): LocalDate = this.atDay(1)
-
 val LocalDate.yearMonth: YearMonth get() = YearMonth.of(year, month)
+
+fun YearMonth.asStartMonth(): LocalDate = this.atDay(1)
 
 val YearMonth.nextMonth: YearMonth get() = plusMonths(1)
 

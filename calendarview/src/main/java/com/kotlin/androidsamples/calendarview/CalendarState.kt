@@ -13,10 +13,14 @@ import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import com.kotlin.androidsamples.calendarview.enum.OutDateStyle
+import com.kotlin.androidsamples.calendarview.extensions.asStartMonth
+import com.kotlin.androidsamples.calendarview.extensions.daysUntil
 import com.kotlin.androidsamples.calendarview.model.CalendarInfo
 import com.kotlin.androidsamples.calendarview.model.CalendarMonth
 import java.time.DayOfWeek
 import java.time.YearMonth
+import java.time.temporal.ChronoUnit
 
 @Stable
 class CalendarState(
@@ -47,10 +51,10 @@ class CalendarState(
             store[index]
         }
 
-    var calendarInfo by mutableStateOf(CalendarInfo(indexCount = 0))
+    var calendarInfo by mutableStateOf(CalendarInfo())
 
     val store = DataStore { offset ->
-        getCalendarMonthData(
+        calendarMonthData(
             startMonth = this.startMonth,
             offset = offset,
             firstDayOfWeek = this.firstDayOfWeek,
@@ -65,10 +69,36 @@ class CalendarState(
     private fun monthDataChanged() {
         store.clear()
         calendarInfo = CalendarInfo(
-            indexCount = getMonthIndicesCount(startMonth, endMonth),
+            indexCount = getMonthIndex(startMonth, endMonth) + 1,
             firstDayOfWeek = firstDayOfWeek,
             outDateStyle = outDateStyle,
         )
+    }
+
+    private fun calendarMonthData(
+        startMonth: YearMonth,
+        offset: Int,
+        firstDayOfWeek: DayOfWeek,
+        outDateStyle: OutDateStyle,
+    ): MonthData {
+        val month = startMonth.plusMonths(offset.toLong())
+        val firstDay = month.asStartMonth()
+        val inDays = firstDayOfWeek.daysUntil(firstDay.dayOfWeek)
+        val outDays = (inDays + month.lengthOfMonth()).let { inAndMonthDays ->
+            val endOfRowDays = if (inAndMonthDays % 7 != 0) 7 - (inAndMonthDays % 7) else 0
+            val endOfGridDays = if (outDateStyle == OutDateStyle.EndOfRow) {
+                0
+            } else {
+                val weeksInMonth = (inAndMonthDays + endOfRowDays) / 7
+                (6 - weeksInMonth) * 7
+            }
+            endOfRowDays + endOfGridDays
+        }
+        return MonthData(month = month, inDays = inDays, outDays = outDays)
+    }
+
+    private fun getMonthIndex(startMonth: YearMonth, targetMonth: YearMonth): Long {
+        return ChronoUnit.MONTHS.between(startMonth, targetMonth)
     }
 
     suspend fun animateScrollToMonth(month: YearMonth) {
@@ -108,7 +138,7 @@ class CalendarState(
                     endMonth = it.getOrNull(1) as? YearMonth ?: YearMonth.now(),
                     firstVisibleMonth = it.getOrNull(2) as? YearMonth ?: YearMonth.now(),
                     firstDayOfWeek = it.getOrNull(3) as? DayOfWeek ?: Utils.daysOfWeek().first(),
-                    outDateStyle = it.getOrNull(4) as? OutDateStyle ?: OutDateStyle.EndOfRow,
+                    outDateStyle = it.getOrNull(4) as? OutDateStyle ?: OutDateStyle.EndOfGrid,
                 )
             }
         )
