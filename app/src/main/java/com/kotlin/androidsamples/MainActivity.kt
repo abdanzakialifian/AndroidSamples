@@ -158,6 +158,6 @@ class MainActivity : AppCompatActivity() {
             "com.kotlin.androidsamples.androidchart.AndroidChartActivity"
         private const val WEB_VIEW_CALLBACK_MODULE =
             "com.kotlin.androidsamples.webviewcallback.WebViewCallbackActivity"
-        private const val CALENDAR_VIEW_MODULE = "com.kotlin.androidsamples.calendarview.CalendarViewActivity"
+        private const val CALENDAR_VIEW_MODULE = "com.kotlin.androidsamples.calendarview.screen.CalendarViewActivity"
     }
 }

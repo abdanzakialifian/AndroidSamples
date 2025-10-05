@@ -1,10 +1,12 @@
 package com.kotlin.androidsamples.calendarview
 
-import com.kotlin.androidsamples.calendarview.Utils.asStartMonth
-import com.kotlin.androidsamples.calendarview.Utils.daysUntil
-import com.kotlin.androidsamples.calendarview.Utils.nextMonth
-import com.kotlin.androidsamples.calendarview.Utils.previousMonth
-import com.kotlin.androidsamples.calendarview.Utils.yearMonth
+import com.kotlin.androidsamples.calendarview.extensions.asStartMonth
+import com.kotlin.androidsamples.calendarview.extensions.daysUntil
+import com.kotlin.androidsamples.calendarview.extensions.nextMonth
+import com.kotlin.androidsamples.calendarview.extensions.previousMonth
+import com.kotlin.androidsamples.calendarview.extensions.yearMonth
+import com.kotlin.androidsamples.calendarview.model.CalendarDay
+import com.kotlin.androidsamples.calendarview.model.CalendarMonth
 import java.time.DayOfWeek
 import java.time.YearMonth
 import java.time.temporal.ChronoUnit
@@ -24,7 +26,14 @@ data class MonthData(
 
     private val nextMonth = month.nextMonth
 
-    val calendarMonth: CalendarMonth = CalendarMonth(month, rows.map { week -> week.map { dayOffset -> getDay(dayOffset) } })
+    val calendarMonth: CalendarMonth = CalendarMonth(
+        yearMonth = month,
+        weekDays = rows.map { week ->
+            week.map { dayOffset ->
+                getDay(dayOffset)
+            }
+        }
+    )
 
     private fun getDay(dayOffset: Int): CalendarDay {
         val date = firstDay.plusDays(dayOffset.toLong())
@@ -60,10 +69,10 @@ fun getCalendarMonthData(
     return MonthData(month, inDays, outDays)
 }
 
-fun getMonthIndex(startMonth: YearMonth, targetMonth: YearMonth): Int {
-    return ChronoUnit.MONTHS.between(startMonth, targetMonth).toInt()
+fun getMonthIndex(startMonth: YearMonth, targetMonth: YearMonth): Long {
+    return ChronoUnit.MONTHS.between(startMonth, targetMonth)
 }
 
-fun getMonthIndicesCount(startMonth: YearMonth, endMonth: YearMonth): Int {
+fun getMonthIndicesCount(startMonth: YearMonth, endMonth: YearMonth): Long {
     return getMonthIndex(startMonth, endMonth) + 1
 }

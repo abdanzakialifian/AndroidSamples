@@ -1,4 +1,4 @@
-package com.kotlin.androidsamples.calendarview
+package com.kotlin.androidsamples.calendarview.screen
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity

@@ -14,7 +14,7 @@
 
     <application>
         <activity
-            android:name=".CalendarViewActivity"
+            android:name=".screen.CalendarViewActivity"
             android:exported="false" />
     </application>
 

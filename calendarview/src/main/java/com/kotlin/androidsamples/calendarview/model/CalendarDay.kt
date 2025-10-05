@@ -1,6 +1,7 @@
-package com.kotlin.androidsamples.calendarview
+package com.kotlin.androidsamples.calendarview.model
 
 import androidx.compose.runtime.Immutable
+import com.kotlin.androidsamples.calendarview.DayPosition
 import java.io.Serializable
 import java.time.LocalDate
 

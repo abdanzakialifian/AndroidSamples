@@ -13,6 +13,8 @@ import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import com.kotlin.androidsamples.calendarview.model.CalendarInfo
+import com.kotlin.androidsamples.calendarview.model.CalendarMonth
 import java.time.DayOfWeek
 import java.time.YearMonth
 
@@ -23,52 +25,20 @@ class CalendarState(
     firstDayOfWeek: DayOfWeek,
     firstVisibleMonth: YearMonth,
     outDateStyle: OutDateStyle,
-    visibleItemState: VisibleItemState?,
 ) : ScrollableState {
-    private var _startMonth by mutableStateOf(startMonth)
-    var startMonth: YearMonth
-        get() = _startMonth
-        set(value) {
-            if (value != startMonth) {
-                _startMonth = value
-                monthDataChanged()
-            }
-        }
+    var startMonth by mutableStateOf(startMonth)
+        private set
 
-    private var _endMonth by mutableStateOf(endMonth)
-    var endMonth: YearMonth
-        get() = _endMonth
-        set(value) {
-            if (value != endMonth) {
-                _endMonth = value
-                monthDataChanged()
-            }
-        }
+    var endMonth by mutableStateOf(endMonth)
+        private set
 
-    private var _firstDayOfWeek by mutableStateOf(firstDayOfWeek)
-    var firstDayOfWeek: DayOfWeek
-        get() = _firstDayOfWeek
-        set(value) {
-            if (value != firstDayOfWeek) {
-                _firstDayOfWeek = value
-                monthDataChanged()
-            }
-        }
+    var firstDayOfWeek by mutableStateOf(firstDayOfWeek)
+        private set
 
-    private var _outDateStyle by mutableStateOf(outDateStyle)
-    var outDateStyle: OutDateStyle
-        get() = _outDateStyle
-        set(value) {
-            if (value != outDateStyle) {
-                _outDateStyle = value
-                monthDataChanged()
-            }
-        }
+    var outDateStyle by mutableStateOf(outDateStyle)
+        private set
 
-    internal val listState = LazyListState(
-        firstVisibleItemIndex = visibleItemState?.firstVisibleItemIndex ?: getScrollIndex(firstVisibleMonth) ?: 0,
-        firstVisibleItemScrollOffset = visibleItemState?.firstVisibleItemScrollOffset ?: 0
-    )
+    val listState = LazyListState(firstVisibleItemIndex = getScrollIndex(firstVisibleMonth).toInt())
 
     val firstVisibleMonth: CalendarMonth by derivedStateOf { store[listState.firstVisibleItemIndex] }
 
@@ -77,9 +47,9 @@ class CalendarState(
             store[index]
         }
 
-    internal var calendarInfo by mutableStateOf(CalendarInfo(indexCount = 0))
+    var calendarInfo by mutableStateOf(CalendarInfo(indexCount = 0))
 
-    internal val store = DataStore { offset ->
+    val store = DataStore { offset ->
         getCalendarMonthData(
             startMonth = this.startMonth,
             offset = offset,
@@ -94,7 +64,6 @@ class CalendarState(
 
     private fun monthDataChanged() {
         store.clear()
-        Utils.checkRange(startMonth, endMonth)
         calendarInfo = CalendarInfo(
             indexCount = getMonthIndicesCount(startMonth, endMonth),
             firstDayOfWeek = firstDayOfWeek,
@@ -103,13 +72,11 @@ class CalendarState(
     }
 
     suspend fun animateScrollToMonth(month: YearMonth) {
-        listState.animateScrollToItem(getScrollIndex(month) ?: return)
+        listState.animateScrollToItem(getScrollIndex(month).toInt())
     }
 
-    private fun getScrollIndex(month: YearMonth): Int? {
-        if (month !in startMonth..endMonth) {
-            return null
-        }
+    private fun getScrollIndex(month: YearMonth): Long {
+        if (month !in startMonth..endMonth) return 0L
         return getMonthIndex(startMonth, month)
     }
 
@@ -118,10 +85,7 @@ class CalendarState(
 
     override fun dispatchRawDelta(delta: Float): Float = listState.dispatchRawDelta(delta)
 
-    override suspend fun scroll(
-        scrollPriority: MutatePriority,
-        block: suspend ScrollScope.() -> Unit
-    ) {
+    override suspend fun scroll(scrollPriority: MutatePriority, block: suspend ScrollScope.() -> Unit) {
         listState.scroll(scrollPriority, block)
     }
 
@@ -140,15 +104,11 @@ class CalendarState(
             },
             restore = {
                 CalendarState(
-                    startMonth = it[0] as YearMonth,
-                    endMonth = it[1] as YearMonth,
-                    firstVisibleMonth = it[2] as YearMonth,
-                    firstDayOfWeek = it[3] as DayOfWeek,
-                    outDateStyle = it[4] as OutDateStyle,
-                    visibleItemState = VisibleItemState(
-                        firstVisibleItemIndex = it[5] as Int,
-                        firstVisibleItemScrollOffset = it[6] as Int
-                    )
+                    startMonth = it.getOrNull(0) as? YearMonth ?: YearMonth.now(),
+                    endMonth = it.getOrNull(1) as? YearMonth ?: YearMonth.now(),
+                    firstVisibleMonth = it.getOrNull(2) as? YearMonth ?: YearMonth.now(),
+                    firstDayOfWeek = it.getOrNull(3) as? DayOfWeek ?: Utils.daysOfWeek().first(),
+                    outDateStyle = it.getOrNull(4) as? OutDateStyle ?: OutDateStyle.EndOfRow,
                 )
             }
         )
@@ -160,11 +120,15 @@ fun rememberCalendarState(
     startMonth: YearMonth = YearMonth.now(),
     endMonth: YearMonth = startMonth,
     firstVisibleMonth: YearMonth = startMonth,
-    firstDayOfWeek: DayOfWeek = Utils.firstDatOfWeekFromLocale(),
+    firstDayOfWeek: DayOfWeek = Utils.daysOfWeek().first(),
     outDateStyle: OutDateStyle = OutDateStyle.EndOfRow
 ): CalendarState {
     return rememberSaveable(
-        inputs = arrayOf<Any>(startMonth, endMonth, firstVisibleMonth, firstDayOfWeek, outDateStyle),
+        startMonth,
+        endMonth,
+        firstVisibleMonth,
+        firstDayOfWeek,
+        outDateStyle,
         saver = CalendarState.Saver
     ) {
         CalendarState(
@@ -173,7 +137,6 @@ fun rememberCalendarState(
             firstVisibleMonth = firstVisibleMonth,
             firstDayOfWeek = firstDayOfWeek,
             outDateStyle = outDateStyle,
-            visibleItemState = null
         )
     }
 }
