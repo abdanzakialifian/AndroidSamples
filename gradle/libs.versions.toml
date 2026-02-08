@@ -1,6 +1,6 @@
 [versions]
-agp = "8.5.1"
-desugar_jdk_libs = "2.1.2"
+agp = "8.10.0"
+desugar_jdk_libs = "2.1.5"
 featureDelivery = "2.1.0"
 featureDeliveryKtx = "2.1.0"
 kotlin = "2.3.10"
@@ -23,7 +23,11 @@ koinBom = "4.0.0-RC1"
 mpandroidchart = "v3.1.0"
 composeBom = "2025.02.00"
 activityCompose = "1.9.3"
-navigationCompose = "2.6.0"
+navigationCompose = "2.9.7"
+playServicesWearable = "19.0.0"
+material3 = "1.5.6"
+wearToolingPreview = "1.0.0"
+coreSplashscreen = "1.2.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -62,6 +66,14 @@ compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
 compose-activity = { module = "androidx.activity:activity-compose", version.ref = "activityCompose" }
 compose-navigation = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
+play-services-wearable = { group = "com.google.android.gms", name = "play-services-wearable", version.ref = "playServicesWearable" }
+androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
+androidx-wear-compose-material3 = { group = "androidx.wear.compose", name = "compose-material3", version.ref = "material3" }
+androidx-wear-compose-foundation = { group = "androidx.wear.compose", name = "compose-foundation", version.ref = "material3" }
+androidx-wear-compose-navigation = { group = "androidx.wear.compose", name = "compose-navigation", version.ref = "material3" }
+androidx-wear-compose-ui-tooling = { group = "androidx.wear.compose", name = "compose-ui-tooling", version.ref = "material3" }
+androidx-wear-tooling-preview = { group = "androidx.wear", name = "wear-tooling-preview", version.ref = "wearToolingPreview" }
+androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "coreSplashscreen" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
