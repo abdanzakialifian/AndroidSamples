@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -11,7 +12,7 @@ android {
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.example.wear"
+        applicationId = "com.kotlin.androidsamples"
         minSdk = 30
         targetSdk = 35
         versionCode = 1
@@ -53,6 +54,7 @@ dependencies {
     implementation(libs.compose.ui)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.compose.ui.tooling.preview)
+    debugImplementation(libs.compose.ui.tooling)
     implementation(libs.androidx.wear.compose.material3)
     implementation(libs.androidx.wear.compose.foundation)
     implementation(libs.androidx.wear.compose.navigation)
@@ -60,4 +62,5 @@ dependencies {
     implementation(libs.androidx.wear.tooling.preview)
     implementation(libs.compose.activity)
     implementation(libs.androidx.core.splashscreen)
+    implementation(libs.kotlinx.serialization.json)
 }

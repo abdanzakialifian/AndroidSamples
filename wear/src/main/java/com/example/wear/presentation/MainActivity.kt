@@ -8,22 +8,12 @@ package com.example.wear.presentation
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.wear.compose.material.MaterialTheme
-import androidx.wear.compose.material.Text
-import androidx.wear.compose.material.TimeText
-import androidx.wear.tooling.preview.devices.WearDevices
-import com.example.wear.R
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.wear.compose.material3.AppScaffold
+import androidx.wear.compose.navigation.SwipeDismissableNavHost
+import androidx.wear.compose.navigation.composable
+import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
 import com.example.wear.presentation.theme.AndroidSamplesTheme
 
 class MainActivity : ComponentActivity() {
@@ -35,38 +25,37 @@ class MainActivity : ComponentActivity() {
         setTheme(android.R.style.Theme_DeviceDefault)
 
         setContent {
-            WearApp("Android")
+            AndroidSamplesTheme {
+                AppScaffold {
+                    WearableGraph()
+                }
+            }
         }
     }
-}
 
-@Composable
-fun WearApp(greetingName: String) {
-    AndroidSamplesTheme {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colors.background),
-            contentAlignment = Alignment.Center
+    @Composable
+    private fun WearableGraph() {
+        val navController = rememberSwipeDismissableNavController()
+
+        SwipeDismissableNavHost(
+            navController = navController,
+            startDestination = Screen.Landing.route
         ) {
-            TimeText()
-            Greeting(greetingName = greetingName)
+            composable(Screen.Landing.route) {
+                LandingScreen(
+                    onConnect = {
+                        navController.navigate(Screen.Connect.route)
+                    }
+                )
+            }
+
+            composable(Screen.Connect.route) {
+                ConnectScreen(
+                    onCancel = {
+                        navController.navigateUp()
+                    }
+                )
+            }
         }
     }
-}
-
-@Composable
-fun Greeting(greetingName: String) {
-    Text(
-        modifier = Modifier.fillMaxWidth(),
-        textAlign = TextAlign.Center,
-        color = MaterialTheme.colors.primary,
-        text = stringResource(R.string.hello_world, greetingName)
-    )
-}
-
-@Preview(device = WearDevices.SMALL_ROUND, showSystemUi = true)
-@Composable
-fun DefaultPreview() {
-    WearApp("Preview Android")
 }

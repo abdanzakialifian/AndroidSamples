@@ -10,6 +10,7 @@ import com.google.android.play.core.splitinstall.SplitInstallRequest
 import com.google.android.play.core.splitinstall.SplitInstallStateUpdatedListener
 import com.google.android.play.core.splitinstall.model.SplitInstallSessionStatus
 import com.kotlin.androidsamples.databinding.ActivityMainBinding
+import com.kotlin.androidsamples.wear.WearActivity
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -101,6 +102,9 @@ class MainActivity : AppCompatActivity() {
                 activityModuleName = CALENDAR_VIEW_MODULE
                 moduleActivityBackStack = resources.getString(R.string.module_calendar_view)
                 navigateToDynamicFeatureModule()
+            }
+            btnWearable.setOnClickListener {
+                startActivity(Intent(this@MainActivity, WearActivity::class.java))
             }
         }
     }
