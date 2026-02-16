@@ -1,7 +1,6 @@
 package com.kotlin.androidsamples.wear.finding
 
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
@@ -19,9 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -29,70 +26,37 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.google.android.gms.wearable.CapabilityClient
-import com.google.android.gms.wearable.Wearable
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.launch
 import java.util.Locale
 
 @Composable
 fun FindingScreen(viewModel: FindingViewModel = hiltViewModel()) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    var time by remember { mutableIntStateOf(15) }
-
-    val context = LocalContext.current
-
-    val capabilityClient = Wearable.getCapabilityClient(context)
-
-    val capabilityChangedListener = remember {
-        CapabilityClient.OnCapabilityChangedListener { capabilityInfo ->
-            Log.d("CEK", "NODES : ${capabilityInfo.nodes}")
-            Log.d("CEK", "NAME : ${capabilityInfo.name}")
-            viewModel.setNodes(capabilityInfo.nodes)
-        }
-    }
+    val scope = rememberCoroutineScope()
 
     LaunchedEffect(Unit) {
-        runCatching {
-            capabilityClient.getCapability("wear", CapabilityClient.FILTER_REACHABLE).await()
-        }.onSuccess {
-            viewModel.setNodes(it.nodes)
-        }.onFailure {
-            Log.d("CEK", "FAILURE : $it")
-        }
+        viewModel.getCapability()
     }
 
-    LaunchedEffect(Unit) {
-        while (time > 0) {
-            delay(1000L)
-            time--
-        }
-    }
-
-    DisposableEffect(time > 0) {
-        if (time > 0) {
-            capabilityClient.addListener(capabilityChangedListener, "wear")
+    DisposableEffect(uiState.time > 0) {
+        if (uiState.time > 0) {
+            scope.launch {
+                viewModel.addListener()
+            }
         }
         onDispose {
-            capabilityClient.removeListener(capabilityChangedListener, "wear")
+            scope.launch {
+                viewModel.removeListener()
+            }
         }
     }
 
-    FindingContent(
-        uiState = uiState,
-        time = time,
-    )
+    FindingContent(uiState = uiState)
 }
 
 @Composable
-private fun FindingContent(
-    uiState: FindingUiState,
-    time: Int,
-) {
-    val minutes = time / 60
-    val seconds = time % 60
-
+private fun FindingContent(uiState: FindingUiState) {
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier
@@ -102,7 +66,12 @@ private fun FindingContent(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Text(
-                text = String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds),
+                text = String.format(
+                    Locale.getDefault(),
+                    "%02d:%02d",
+                    uiState.minutes,
+                    uiState.seconds
+                ),
                 color = MaterialTheme.colorScheme.onPrimary
             )
 
@@ -136,7 +105,6 @@ private fun FindingContentPreview() {
     MaterialTheme(colorScheme = colorScheme) {
         FindingContent(
             uiState = FindingUiState(),
-            time = 15,
         )
     }
 }
