@@ -2,6 +2,8 @@ package com.kotlin.androidsamples.wear.finding
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -18,6 +20,8 @@ import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -25,12 +29,19 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.google.android.gms.wearable.Node
 import kotlinx.coroutines.awaitCancellation
+import kotlinx.coroutines.launch
 import java.util.Locale
 
 @Composable
-fun FindingScreen(viewModel: FindingViewModel = hiltViewModel()) {
+fun FindingScreen(
+    viewModel: FindingViewModel = hiltViewModel(),
+    onClick: (Node) -> Unit,
+) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    val scope = rememberCoroutineScope()
 
     LaunchedEffect(Unit) {
         viewModel.startCountdown()
@@ -53,14 +64,21 @@ fun FindingScreen(viewModel: FindingViewModel = hiltViewModel()) {
 
     FindingContent(
         uiState = uiState,
+        onClick = onClick,
         onRetry = {
-            viewModel.startCountdown()
+            scope.launch {
+                viewModel.startCountdown()
+            }
         },
     )
 }
 
 @Composable
-private fun FindingContent(uiState: FindingUiState, onRetry: () -> Unit) {
+private fun FindingContent(
+    uiState: FindingUiState,
+    onClick: (Node) -> Unit,
+    onRetry: () -> Unit,
+) {
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier
@@ -76,35 +94,33 @@ private fun FindingContent(uiState: FindingUiState, onRetry: () -> Unit) {
                     uiState.minutes,
                     uiState.seconds
                 ),
-                color = MaterialTheme.colorScheme.onPrimary
             )
 
             LazyColumn(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                items(items = uiState.nodes.toList()) {
+                items(items = uiState.nodes.toList()) { node ->
                     Text(
-                        text = buildString {
-                            append(it.id)
-                            append(" -- ")
-                            append(it.isNearby)
-                            append(" -- ")
-                            append(it.displayName)
-                        },
-                        color = MaterialTheme.colorScheme.onPrimary
+                        modifier = Modifier
+                            .clickable(
+                                indication = null,
+                                interactionSource = remember { MutableInteractionSource() },
+                                onClick = {
+                                    onClick(node)
+                                }
+                            )
+                            .padding(4.dp),
+                        text = node.displayName,
                     )
                 }
 
                 item {
-                    if (uiState.time == 0) {
+                    if (uiState.nodes.isEmpty() && uiState.time == 0) {
                         Button(
                             modifier = Modifier.padding(top = 16.dp),
                             onClick = onRetry,
                             content = {
-                                Text(
-                                    text = "Search Again",
-                                    color = MaterialTheme.colorScheme.onPrimary
-                                )
+                                Text(text = "Search Again")
                             }
                         )
                     }
@@ -115,7 +131,7 @@ private fun FindingContent(uiState: FindingUiState, onRetry: () -> Unit) {
 }
 
 @RequiresApi(Build.VERSION_CODES.S)
-@Preview(showBackground = true, apiLevel = 35)
+@Preview(showBackground = true)
 @Composable
 private fun FindingContentPreview() {
     val context = LocalContext.current
@@ -126,6 +142,7 @@ private fun FindingContentPreview() {
     MaterialTheme(colorScheme = colorScheme) {
         FindingContent(
             uiState = FindingUiState(),
+            onClick = {},
             onRetry = {}
         )
     }
