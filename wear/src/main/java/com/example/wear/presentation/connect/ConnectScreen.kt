@@ -33,6 +33,11 @@ fun ConnectScreen(viewModel: ConnectViewModel = hiltViewModel()) {
         }
     }
 
+    ConnectContent()
+}
+
+@Composable
+private fun ConnectContent() {
     ScreenScaffold { paddingValues ->
         Column(
             modifier = Modifier
@@ -59,8 +64,8 @@ fun ConnectScreen(viewModel: ConnectViewModel = hiltViewModel()) {
 
 @WearPreviewDevices
 @Composable
-private fun ConnectScreenPreview() {
+private fun ConnectContentPreview() {
     AndroidSamplesTheme {
-        ConnectScreen()
+        ConnectContent()
     }
 }
