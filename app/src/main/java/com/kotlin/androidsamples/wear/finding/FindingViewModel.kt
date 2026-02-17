@@ -30,8 +30,9 @@ class FindingViewModel @Inject constructor(@ApplicationContext context: Context)
         _uiState.update { it.copy(nodes = capabilityInfo.nodes) }
     }
 
-    init {
+    fun startCountdown() {
         viewModelScope.launch {
+            _uiState.update { it.copy(time = 15) }
             while (uiState.value.time > 0) {
                 delay(1000L)
                 _uiState.update { it.copy(time = it.time - 1) }

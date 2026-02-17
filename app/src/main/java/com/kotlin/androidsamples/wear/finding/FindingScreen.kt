@@ -10,15 +10,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -26,37 +25,42 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.awaitCancellation
 import java.util.Locale
 
 @Composable
 fun FindingScreen(viewModel: FindingViewModel = hiltViewModel()) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    val scope = rememberCoroutineScope()
-
     LaunchedEffect(Unit) {
+        viewModel.startCountdown()
+    }
+
+    LaunchedEffect(uiState.time > 0) {
+        if (uiState.time == 0) {
+            return@LaunchedEffect
+        }
+
         viewModel.getCapability()
-    }
+        viewModel.addListener()
 
-    DisposableEffect(uiState.time > 0) {
-        if (uiState.time > 0) {
-            scope.launch {
-                viewModel.addListener()
-            }
-        }
-        onDispose {
-            scope.launch {
-                viewModel.removeListener()
-            }
+        try {
+            awaitCancellation()
+        } finally {
+            viewModel.removeListener()
         }
     }
 
-    FindingContent(uiState = uiState)
+    FindingContent(
+        uiState = uiState,
+        onRetry = {
+            viewModel.startCountdown()
+        },
+    )
 }
 
 @Composable
-private fun FindingContent(uiState: FindingUiState) {
+private fun FindingContent(uiState: FindingUiState, onRetry: () -> Unit) {
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier
@@ -75,7 +79,9 @@ private fun FindingContent(uiState: FindingUiState) {
                 color = MaterialTheme.colorScheme.onPrimary
             )
 
-            LazyColumn {
+            LazyColumn(
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
                 items(items = uiState.nodes.toList()) {
                     Text(
                         text = buildString {
@@ -87,6 +93,21 @@ private fun FindingContent(uiState: FindingUiState) {
                         },
                         color = MaterialTheme.colorScheme.onPrimary
                     )
+                }
+
+                item {
+                    if (uiState.time == 0) {
+                        Button(
+                            modifier = Modifier.padding(top = 16.dp),
+                            onClick = onRetry,
+                            content = {
+                                Text(
+                                    text = "Search Again",
+                                    color = MaterialTheme.colorScheme.onPrimary
+                                )
+                            }
+                        )
+                    }
                 }
             }
         }
@@ -105,6 +126,7 @@ private fun FindingContentPreview() {
     MaterialTheme(colorScheme = colorScheme) {
         FindingContent(
             uiState = FindingUiState(),
+            onRetry = {}
         )
     }
 }
