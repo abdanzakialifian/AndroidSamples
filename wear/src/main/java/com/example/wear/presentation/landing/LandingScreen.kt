@@ -1,4 +1,4 @@
-package com.example.wear.presentation
+package com.example.wear.presentation.landing
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxWidth

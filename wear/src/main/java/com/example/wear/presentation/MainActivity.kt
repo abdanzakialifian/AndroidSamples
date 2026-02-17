@@ -14,8 +14,12 @@ import androidx.wear.compose.material3.AppScaffold
 import androidx.wear.compose.navigation.SwipeDismissableNavHost
 import androidx.wear.compose.navigation.composable
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
+import com.example.wear.presentation.connect.ConnectScreen
+import com.example.wear.presentation.landing.LandingScreen
 import com.example.wear.presentation.theme.AndroidSamplesTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
@@ -50,11 +54,7 @@ class MainActivity : ComponentActivity() {
             }
 
             composable(Screen.Connect.route) {
-                ConnectScreen(
-                    onCancel = {
-                        navController.navigateUp()
-                    }
-                )
+                ConnectScreen()
             }
         }
     }
