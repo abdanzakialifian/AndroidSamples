@@ -18,20 +18,21 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.android.gms.wearable.Node
-import kotlinx.coroutines.awaitCancellation
-import kotlinx.coroutines.launch
 import java.util.Locale
 
 @Composable
@@ -41,24 +42,30 @@ fun FindingScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    val scope = rememberCoroutineScope()
+    val lifecycleOwner = LocalLifecycleOwner.current
 
-    LaunchedEffect(Unit) {
-        viewModel.startCountdown()
+    LaunchedEffect(uiState.time) {
+        if (uiState.time == 0) {
+            viewModel.onIntent(FindingIntent.RemoveCapabilityChangedListener)
+        }
     }
 
-    LaunchedEffect(uiState.time > 0) {
-        if (uiState.time == 0) {
-            return@LaunchedEffect
+    DisposableEffect(lifecycleOwner, uiState.time > 0) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_RESUME && uiState.time > 0) {
+                viewModel.onIntent(FindingIntent.GetCapability)
+                viewModel.onIntent(FindingIntent.AddCapabilityChangedListener)
+            }
+
+            if (event == Lifecycle.Event.ON_PAUSE) {
+                viewModel.onIntent(FindingIntent.RemoveCapabilityChangedListener)
+            }
         }
 
-        viewModel.getCapability()
-        viewModel.addListener()
+        lifecycleOwner.lifecycle.addObserver(observer)
 
-        try {
-            awaitCancellation()
-        } finally {
-            viewModel.removeListener()
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
         }
     }
 
@@ -66,9 +73,7 @@ fun FindingScreen(
         uiState = uiState,
         onClick = onClick,
         onRetry = {
-            scope.launch {
-                viewModel.startCountdown()
-            }
+            viewModel.onIntent(FindingIntent.StartCountdown)
         },
     )
 }
