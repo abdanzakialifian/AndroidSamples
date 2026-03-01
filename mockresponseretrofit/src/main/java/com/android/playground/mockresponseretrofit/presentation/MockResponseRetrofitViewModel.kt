@@ -8,8 +8,9 @@ import com.android.playground.mockresponseretrofit.utils.Result
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-class MockResponseRetrofitViewModel(private val mockResponseRetrofitRepository: MockResponseRetrofitRepository) :
-    ViewModel() {
+class MockResponseRetrofitViewModel(
+    private val mockResponseRetrofitRepository: MockResponseRetrofitRepository
+) : ViewModel() {
     private val _listUsers: MutableStateFlow<Result<List<ListUsersResponse>>> =
         MutableStateFlow(Result.INITIAL)
     val listUsers get() = _listUsers.asStateFlow()

@@ -10,17 +10,6 @@ android {
 
     defaultConfig {
         minSdk = 24
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-    }
-
-    buildTypes {
-        release {
-            isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-        }
     }
 
     compileOptions {
@@ -42,18 +31,4 @@ android {
 
 dependencies {
     implementation(project(":app"))
-    compileOnly(platform(libs.koin.bom))
-    compileOnly(libs.androidx.core.ktx)
-    compileOnly(libs.androidx.appcompat)
-    compileOnly(libs.material)
-    compileOnly(libs.androidx.activity)
-    compileOnly(libs.androidx.constraintlayout)
-    compileOnly(libs.okhttp)
-    compileOnly(libs.retrofit)
-    compileOnly(libs.gson)
-    compileOnly(libs.kotlinx.coroutines.core)
-    compileOnly(libs.kotlinx.coroutines.android)
-    compileOnly(libs.logging.interceptor)
-    compileOnly(libs.koin.core)
-    compileOnly(libs.koin.android)
 }

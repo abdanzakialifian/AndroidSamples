@@ -4,12 +4,12 @@ import android.content.Context
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.android.playground.Constants
+import com.android.playground.di.DynamicFeatureLoader
 import com.google.android.play.core.splitinstall.SplitInstallManagerFactory
 import com.google.android.play.core.splitinstall.SplitInstallRequest
 import com.google.android.play.core.splitinstall.SplitInstallStateUpdatedListener
 import com.google.android.play.core.splitinstall.model.SplitInstallSessionStatus
-import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -17,24 +17,27 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
-import javax.inject.Inject
+import java.lang.ref.WeakReference
 
-@HiltViewModel
-class MainViewModel @Inject constructor(
-    @param:ApplicationContext private val context: Context
-) : ViewModel() {
+class MainViewModel : ViewModel() {
     private val _uiState: MutableStateFlow<MainUiState> = MutableStateFlow(MainUiState())
     val uiState get() = _uiState.asStateFlow()
 
     private val _effects: Channel<MainEffect> = Channel(capacity = Channel.BUFFERED)
     val effects get() = _effects.receiveAsFlow()
 
-    private val splitInstallManager by lazy { SplitInstallManagerFactory.create(context) }
+    private var context: WeakReference<Context>? = null
+
+    private val splitInstallManager by lazy {
+        context?.get()?.let {
+            SplitInstallManagerFactory.create(it)
+        }
+    }
 
     private val splitInstallManagerListener = SplitInstallStateUpdatedListener { state ->
         Log.d(this::class.java.simpleName, "State Update : $state")
         if (state.sessionId() == _uiState.value.sessionId) {
-            when(state.status()) {
+            when (state.status()) {
                 SplitInstallSessionStatus.CANCELED -> {}
 
                 SplitInstallSessionStatus.CANCELING -> {}
@@ -46,6 +49,7 @@ class MainViewModel @Inject constructor(
                 SplitInstallSessionStatus.FAILED -> {}
 
                 SplitInstallSessionStatus.INSTALLED -> {
+                    DynamicFeatureLoader.load(Constants.MOCK_RESPONSE_RETROFIT_PROVIDER)
                     _effects.trySend(MainEffect.NavigateToDynamicFeatureModule(_uiState.value.targetActivityPath))
                 }
 
@@ -58,6 +62,10 @@ class MainViewModel @Inject constructor(
                 SplitInstallSessionStatus.UNKNOWN -> {}
             }
         }
+    }
+
+    fun attachContext(context: Context) {
+        this.context = WeakReference(context)
     }
 
     fun onIntent(intent: MainIntent) {
@@ -77,7 +85,8 @@ class MainViewModel @Inject constructor(
     ) {
         try {
             _uiState.update { it.copy(targetActivityPath = targetActivityPath) }
-            if (splitInstallManager.installedModules.contains(moduleName)) {
+            if (splitInstallManager?.installedModules?.contains(moduleName) == true) {
+                DynamicFeatureLoader.load(Constants.MOCK_RESPONSE_RETROFIT_PROVIDER)
                 _effects.trySend(MainEffect.NavigateToDynamicFeatureModule(targetActivityPath))
             } else {
                 initSplitInstallManager(moduleName)
@@ -89,14 +98,14 @@ class MainViewModel @Inject constructor(
 
     private fun initSplitInstallManager(moduleName: String) {
         viewModelScope.launch {
-            splitInstallManager.registerListener(splitInstallManagerListener)
+            splitInstallManager?.registerListener(splitInstallManagerListener)
             val request = SplitInstallRequest
                 .newBuilder()
                 .addModule(moduleName)
                 .build()
             try {
-                val sessionId = splitInstallManager.startInstall(request).await()
-                _uiState.update { it.copy(sessionId = sessionId) }
+                val sessionId = splitInstallManager?.startInstall(request)?.await()
+                _uiState.update { it.copy(sessionId = sessionId ?: 0) }
             } catch (e: Exception) {
                 Log.d(this::class.java.simpleName, "ERROR : ${e.message}")
             }
@@ -105,6 +114,6 @@ class MainViewModel @Inject constructor(
 
     override fun onCleared() {
         super.onCleared()
-        splitInstallManager.unregisterListener(splitInstallManagerListener)
+        splitInstallManager?.unregisterListener(splitInstallManagerListener)
     }
 }

@@ -51,38 +51,45 @@ android {
         buildConfig = true
         viewBinding = true
     }
-    dynamicFeatures += setOf(":dynamicapplauncher", ":mockresponseretrofit", ":androidchart", ":webviewcallback", ":calendarview")
+    dynamicFeatures += setOf(
+        projects.mockresponseretrofit.path,
+        projects.dynamicapplauncher.path,
+        projects.androidchart.path,
+        projects.webviewcallback.path,
+        projects.calendarview.path,
+    )
 }
 
 dependencies {
-    // This dependency is downloaded from the Google’s Maven repository.
-    // Make sure you also include that repository in your project's build.gradle file.
+    // Dynamic Feature Module
     implementation(libs.feature.delivery)
-    // For Kotlin users, also import the Kotlin extensions library for Play Feature Delivery:
     implementation(libs.feature.delivery.ktx)
 
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.material)
-    implementation(libs.androidx.activity)
-    implementation(libs.androidx.constraintlayout)
-    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    // Android
+    api(libs.androidx.core.ktx)
+    api(libs.androidx.appcompat)
+    api(libs.material)
+    api(libs.androidx.activity)
+    api(libs.androidx.constraintlayout)
+    api(libs.androidx.lifecycle.viewmodel.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     coreLibraryDesugaring(libs.desugar.jdk.libs)
 
-    implementation(platform(libs.koin.bom))
-    implementation(libs.okhttp)
-    implementation(libs.retrofit)
-    implementation(libs.gson)
-    implementation(libs.kotlinx.coroutines.core)
-    implementation(libs.kotlinx.coroutines.android)
-    implementation(libs.kotlinx.coroutines.play.services)
-    implementation(libs.logging.interceptor)
-    implementation(libs.koin.core)
-    implementation(libs.koin.android)
+    // Coroutines
+    api(libs.kotlinx.coroutines.core)
+    api(libs.kotlinx.coroutines.android)
+    api(libs.kotlinx.coroutines.play.services)
 
+    // Koin
+    implementation(platform(libs.koin.bom))
+    api(libs.koin.core)
+    api(libs.koin.android)
+    api(libs.koin.navigation)
+    api(libs.koin.compose)
+
+    // Compose
     implementation(platform(libs.compose.bom))
     implementation(libs.compose.animation)
     implementation(libs.compose.animation.core)
@@ -96,6 +103,12 @@ dependencies {
     implementation(libs.compose.activity)
     implementation(libs.compose.navigation)
     debugImplementation(libs.compose.ui.tooling)
+
+    // Network
+    api(libs.okhttp)
+    api(libs.retrofit)
+    api(libs.gson)
+    api(libs.logging.interceptor)
 
     implementation(libs.hilt.android)
     implementation(libs.androidx.hilt.navigation.compose)

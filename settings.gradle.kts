@@ -22,7 +22,8 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Android Samples"
+rootProject.name = "AndroidPlayground"
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 include(":app")
 include(":dynamicapplauncher")
 include(":mockresponseretrofit")

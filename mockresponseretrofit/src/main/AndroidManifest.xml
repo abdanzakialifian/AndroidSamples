@@ -12,7 +12,7 @@
         <dist:fusing dist:include="true" />
     </dist:module>
 
-    <application android:name=".presentation.MockResponseRetrofitApp">
+    <application>
         <activity
             android:name=".presentation.MockResponseRetrofitActivity"
             android:exported="false" />
