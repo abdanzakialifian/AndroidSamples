@@ -48,6 +48,7 @@ android {
     }
 
     buildFeatures {
+        buildConfig = true
         viewBinding = true
     }
     dynamicFeatures += setOf(":dynamicapplauncher", ":mockresponseretrofit", ":androidchart", ":webviewcallback", ":calendarview")
