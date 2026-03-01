@@ -5,7 +5,7 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
 }
 android {
-    namespace = "com.kotlin.androidsamples.dynamicapplauncher"
+    namespace = "com.android.playground.dynamicapplauncher"
     compileSdk = 35
 
     defaultConfig {

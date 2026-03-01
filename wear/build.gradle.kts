@@ -10,11 +10,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.wear"
+    namespace = "com.android.playground.wear"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.kotlin.androidsamples"
+        applicationId = "com.android.playground"
         minSdk = 30
         targetSdk = 35
         versionCode = 1

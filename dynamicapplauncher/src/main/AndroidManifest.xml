@@ -27,7 +27,7 @@
             android:icon="@mipmap/ic_new_year_launcher"
             android:label="@string/app_name"
             android:roundIcon="@mipmap/ic_new_year_launcher_round"
-            android:targetActivity="com.kotlin.androidsamples.main.MainActivity">
+            android:targetActivity="com.android.playground.main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -42,7 +42,7 @@
             android:icon="@mipmap/ic_ied_launcher"
             android:label="@string/app_name"
             android:roundIcon="@mipmap/ic_ied_launcher_round"
-            android:targetActivity="com.kotlin.androidsamples.main.MainActivity">
+            android:targetActivity="com.android.playground.main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -12,11 +12,11 @@ plugins {
 }
 
 android {
-    namespace = "com.kotlin.androidsamples"
+    namespace = "com.android.playground"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.kotlin.androidsamples"
+        applicationId = "com.android.playground"
         minSdk = 24
         targetSdk = 35
         versionCode = 1

@@ -5,7 +5,7 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
 }
 android {
-    namespace = "com.kotlin.androidsamples.mockresponseretrofit"
+    namespace = "com.android.playground.mockresponseretrofit"
     compileSdk = 35
 
     defaultConfig {

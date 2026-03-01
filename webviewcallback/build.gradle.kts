@@ -5,7 +5,7 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
 }
 android {
-    namespace = "com.kotlin.androidsamples.webviewcallback"
+    namespace = "com.android.playground.webviewcallback"
     compileSdk = 35
 
     defaultConfig {

@@ -5,7 +5,7 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
 }
 android {
-    namespace = "com.kotlin.androidsamples.androidchart"
+    namespace = "com.android.playground.androidchart"
     compileSdk = 35
 
     defaultConfig {

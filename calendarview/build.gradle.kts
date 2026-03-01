@@ -6,7 +6,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
 }
 android {
-    namespace = "com.kotlin.androidsamples.calendarview"
+    namespace = "com.android.playground.calendarview"
     compileSdk = 35
 
     defaultConfig {

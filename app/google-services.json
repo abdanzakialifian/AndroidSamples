@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:30333104822:android:910f23d1b683dfbd362c17",
         "android_client_info": {
-          "package_name": "com.kotlin.androidsamples"
+          "package_name": "com.android.playground"
         }
       },
       "oauth_client": [
