@@ -50,13 +50,13 @@ android {
         buildConfig = true
         viewBinding = true
     }
-
     dynamicFeatures += setOf(
         projects.mockOkhttp.path,
         projects.appLauncher.path,
         projects.chart.path,
         projects.webview.path,
         projects.calendar.path,
+        projects.phone.path,
     )
 }
 

@@ -5,4 +5,5 @@
     <string name="title_chart">Chart</string>
     <string name="title_web_view">WebView</string>
     <string name="title_calendar">Calendar</string>
+    <string name="title_phone">Phone</string>
 </resources>
