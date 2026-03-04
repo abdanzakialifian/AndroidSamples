@@ -23,10 +23,8 @@ import com.android.playground.createNavType
 import com.android.playground.wear.detail.DetailScreen
 import com.android.playground.wear.detail.NodeUi
 import com.android.playground.wear.finding.FindingScreen
-import dagger.hilt.android.AndroidEntryPoint
 import kotlin.reflect.typeOf
 
-@AndroidEntryPoint
 class WearActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.S)
     override fun onCreate(savedInstanceState: Bundle?) {

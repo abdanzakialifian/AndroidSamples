@@ -27,22 +27,28 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.android.gms.wearable.Node
+import org.koin.androidx.compose.koinViewModel
 import java.util.Locale
 
 @Composable
 fun FindingScreen(
-    viewModel: FindingViewModel = hiltViewModel(),
+    viewModel: FindingViewModel = koinViewModel(),
     onClick: (Node) -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     val lifecycleOwner = LocalLifecycleOwner.current
+
+    val context = LocalContext.current
+
+    LaunchedEffect(Unit) {
+        viewModel.attachContext(context)
+    }
 
     LaunchedEffect(uiState.time) {
         if (uiState.time == 0) {

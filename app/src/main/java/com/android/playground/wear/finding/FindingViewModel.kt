@@ -5,8 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.wearable.CapabilityClient
 import com.google.android.gms.wearable.Wearable
-import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -19,14 +17,15 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
-import javax.inject.Inject
+import java.lang.ref.WeakReference
 
-@HiltViewModel
-class FindingViewModel @Inject constructor(@ApplicationContext context: Context) : ViewModel() {
+class FindingViewModel : ViewModel() {
     private val _uiState: MutableStateFlow<FindingUiState> = MutableStateFlow(FindingUiState())
     val uiState: StateFlow<FindingUiState> = _uiState
 
-    val capabilityClient = Wearable.getCapabilityClient(context)
+    private var context: WeakReference<Context>? = null
+
+    val capabilityClient = context?.get()?.let { Wearable.getCapabilityClient(it) }
 
     private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
@@ -40,6 +39,10 @@ class FindingViewModel @Inject constructor(@ApplicationContext context: Context)
         onIntent(FindingIntent.StartCountdown)
     }
 
+    fun attachContext(context: Context) {
+        this.context = WeakReference(context)
+    }
+
     fun onIntent(intent: FindingIntent) {
         when (intent) {
             FindingIntent.AddCapabilityChangedListener -> addCapabilityChangedListener()
@@ -50,7 +53,7 @@ class FindingViewModel @Inject constructor(@ApplicationContext context: Context)
     }
 
     private fun startCountdown() {
-         viewModelScope.launch {
+        viewModelScope.launch {
             _uiState.update { it.copy(time = 15) }
             while (uiState.value.time > 0) {
                 delay(1000L)
@@ -63,8 +66,9 @@ class FindingViewModel @Inject constructor(@ApplicationContext context: Context)
         viewModelScope.launch {
             runCatching {
                 val capabilityInfo =
-                    capabilityClient.getCapability("wear", CapabilityClient.FILTER_REACHABLE).await()
-                _uiState.update { it.copy(nodes = capabilityInfo.nodes) }
+                    capabilityClient?.getCapability("wear", CapabilityClient.FILTER_REACHABLE)
+                        ?.await()
+                _uiState.update { it.copy(nodes = capabilityInfo?.nodes.orEmpty()) }
             }
         }
     }
@@ -73,7 +77,7 @@ class FindingViewModel @Inject constructor(@ApplicationContext context: Context)
         addCapabilityChangedListenerJob?.start()
         addCapabilityChangedListenerJob = viewModelScope.launch {
             runCatching {
-                capabilityClient.addListener(capabilityChangedListener, "wear").await()
+                capabilityClient?.addListener(capabilityChangedListener, "wear")?.await()
             }
         }
     }
@@ -83,7 +87,7 @@ class FindingViewModel @Inject constructor(@ApplicationContext context: Context)
             withContext(NonCancellable) {
                 runCatching {
                     addCapabilityChangedListenerJob?.cancel()
-                    capabilityClient.removeListener(capabilityChangedListener, "wear").await()
+                    capabilityClient?.removeListener(capabilityChangedListener, "wear")?.await()
                 }
             }
         }
