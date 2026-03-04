@@ -1,12 +1,10 @@
-package com.example.wear.presentation.connect
+package com.android.playground.watch.presentation.connect
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.wearable.MessageClient
 import com.google.android.gms.wearable.Wearable
-import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -15,13 +13,14 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
-import javax.inject.Inject
+import java.lang.ref.WeakReference
 
-@HiltViewModel
-class ConnectViewModel @Inject constructor(@ApplicationContext context: Context) : ViewModel() {
-    private val capabilityClient = Wearable.getCapabilityClient(context)
+class ConnectViewModel : ViewModel() {
+    private var context: WeakReference<Context>? = null
 
-    private val messageClient = Wearable.getMessageClient(context)
+    private val capabilityClient = context?.get()?.let { Wearable.getCapabilityClient(it) }
+
+    private val messageClient = context?.get()?.let { Wearable.getMessageClient(it) }
 
     private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
@@ -31,6 +30,10 @@ class ConnectViewModel @Inject constructor(@ApplicationContext context: Context)
 
     private val messageReceivedListener = MessageClient.OnMessageReceivedListener {
 
+    }
+
+    fun attachContext(context: Context) {
+        this.context = WeakReference(context)
     }
 
     fun onIntent(intent: ConnectIntent) {
@@ -46,7 +49,7 @@ class ConnectViewModel @Inject constructor(@ApplicationContext context: Context)
         addLocalCapabilityJob?.start()
         addLocalCapabilityJob = viewModelScope.launch {
             runCatching {
-                capabilityClient.addLocalCapability("wear").await()
+                capabilityClient?.addLocalCapability("wear")?.await()
             }
         }
     }
@@ -56,7 +59,7 @@ class ConnectViewModel @Inject constructor(@ApplicationContext context: Context)
             withContext(NonCancellable) {
                 runCatching {
                     addLocalCapabilityJob?.cancel()
-                    capabilityClient.removeLocalCapability("wear").await()
+                    capabilityClient?.removeLocalCapability("wear")?.await()
                 }
             }
         }
@@ -66,7 +69,7 @@ class ConnectViewModel @Inject constructor(@ApplicationContext context: Context)
         addMessageReceivedListenerJob?.start()
         addMessageReceivedListenerJob = viewModelScope.launch {
             runCatching {
-                messageClient.addListener(messageReceivedListener).await()
+                messageClient?.addListener(messageReceivedListener)?.await()
             }
         }
     }
@@ -76,7 +79,7 @@ class ConnectViewModel @Inject constructor(@ApplicationContext context: Context)
             withContext(NonCancellable) {
                 runCatching {
                     addMessageReceivedListenerJob?.cancel()
-                    messageClient.removeListener(messageReceivedListener).await()
+                    messageClient?.removeListener(messageReceivedListener)?.await()
                 }
             }
         }

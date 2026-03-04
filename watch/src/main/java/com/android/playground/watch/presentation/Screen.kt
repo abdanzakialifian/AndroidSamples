@@ -1,4 +1,4 @@
-package com.example.wear.presentation
+package com.android.playground.watch.presentation
 
 import kotlinx.serialization.Serializable
 

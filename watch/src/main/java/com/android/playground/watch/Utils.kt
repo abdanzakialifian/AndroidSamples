@@ -1,4 +1,4 @@
-package com.example.wear
+package com.android.playground.watch
 
 import android.os.Build
 import android.util.Log

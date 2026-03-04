@@ -1,10 +1,8 @@
-package com.example.wear
+package com.android.playground.watch
 
 import android.app.Application
-import dagger.hilt.android.HiltAndroidApp
 
-@HiltAndroidApp
-class WearApplication : Application() {
+class WatchApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         Utils.getDeviceInformation()

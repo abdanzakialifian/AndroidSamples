@@ -1,4 +1,4 @@
-package com.example.wear.presentation.connect
+package com.android.playground.watch.presentation.connect
 
 sealed interface ConnectIntent {
     data object AddLocalCapability : ConnectIntent

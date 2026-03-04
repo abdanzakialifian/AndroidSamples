@@ -3,8 +3,9 @@
  * most up to date changes to the libraries and their usages.
  */
 
-package com.example.wear.presentation
+package com.android.playground.watch.presentation
 
+import android.R
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -14,19 +15,17 @@ import androidx.wear.compose.material3.AppScaffold
 import androidx.wear.compose.navigation.SwipeDismissableNavHost
 import androidx.wear.compose.navigation.composable
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
-import com.example.wear.presentation.connect.ConnectScreen
-import com.example.wear.presentation.landing.LandingScreen
-import com.example.wear.presentation.theme.AndroidSamplesTheme
-import dagger.hilt.android.AndroidEntryPoint
+import com.android.playground.watch.presentation.connect.ConnectScreen
+import com.android.playground.watch.presentation.landing.LandingScreen
+import com.android.playground.watch.presentation.theme.AndroidSamplesTheme
 
-@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
 
         super.onCreate(savedInstanceState)
 
-        setTheme(android.R.style.Theme_DeviceDefault)
+        setTheme(R.style.Theme_DeviceDefault)
 
         setContent {
             AndroidSamplesTheme {

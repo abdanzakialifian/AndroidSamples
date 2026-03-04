@@ -9,7 +9,7 @@ plugins {
 }
 
 android {
-    namespace = "com.android.playground.wear"
+    namespace = "com.android.playground.watch"
     compileSdk = 35
 
     defaultConfig {
@@ -18,7 +18,6 @@ android {
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
-
     }
 
     buildTypes {
@@ -39,17 +38,14 @@ android {
             jvmTarget.set(JvmTarget.JVM_17)
         }
     }
-    kotlin {
-        compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_17)
-        }
-    }
     buildFeatures {
         compose = true
     }
 }
 
 dependencies {
+    implementation(projects.core.common)
+
     implementation(platform(libs.compose.bom))
     implementation(libs.play.services.wearable)
     implementation(libs.compose.ui)

@@ -1,4 +1,4 @@
-package com.example.wear.presentation.landing
+package com.android.playground.watch.presentation.landing
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,7 +17,7 @@ import androidx.wear.compose.material3.SurfaceTransformation
 import androidx.wear.compose.material3.lazy.rememberTransformationSpec
 import androidx.wear.compose.material3.lazy.transformedHeight
 import androidx.wear.compose.ui.tooling.preview.WearPreviewSmallRound
-import com.example.wear.presentation.theme.AndroidSamplesTheme
+import com.android.playground.watch.presentation.theme.AndroidSamplesTheme
 
 @Composable
 fun LandingScreen(
