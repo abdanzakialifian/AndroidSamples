@@ -3,6 +3,7 @@ package com.android.playground.main
 data class MainUiState(
     val sessionId: Int = 0,
     val targetActivityPath: String = "",
+    val moduleName: String = "",
 )
 
 sealed interface MainIntent {

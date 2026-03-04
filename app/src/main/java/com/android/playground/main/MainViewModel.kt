@@ -4,10 +4,12 @@ import android.content.Context
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.android.playground.R
 import com.android.playground.core.common.Constants
 import com.android.playground.di.DynamicFeatureLoader
 import com.google.android.play.core.splitinstall.SplitInstallManagerFactory
 import com.google.android.play.core.splitinstall.SplitInstallRequest
+import com.google.android.play.core.splitinstall.SplitInstallSessionState
 import com.google.android.play.core.splitinstall.SplitInstallStateUpdatedListener
 import com.google.android.play.core.splitinstall.model.SplitInstallSessionStatus
 import kotlinx.coroutines.channels.Channel
@@ -34,35 +36,8 @@ class MainViewModel : ViewModel() {
         }
     }
 
-    private val splitInstallManagerListener = SplitInstallStateUpdatedListener { state ->
-        Log.d(this::class.java.simpleName, "State Update : $state")
-        if (state.sessionId() == _uiState.value.sessionId) {
-            when (state.status()) {
-                SplitInstallSessionStatus.CANCELED -> {}
-
-                SplitInstallSessionStatus.CANCELING -> {}
-
-                SplitInstallSessionStatus.DOWNLOADED -> {}
-
-                SplitInstallSessionStatus.DOWNLOADING -> {}
-
-                SplitInstallSessionStatus.FAILED -> {}
-
-                SplitInstallSessionStatus.INSTALLED -> {
-                    DynamicFeatureLoader.load(Constants.MOCK_RESPONSE_RETROFIT_PROVIDER)
-                    _effects.trySend(MainEffect.NavigateToDynamicFeatureModule(_uiState.value.targetActivityPath))
-                }
-
-                SplitInstallSessionStatus.INSTALLING -> {}
-
-                SplitInstallSessionStatus.PENDING -> {}
-
-                SplitInstallSessionStatus.REQUIRES_USER_CONFIRMATION -> {}
-
-                SplitInstallSessionStatus.UNKNOWN -> {}
-            }
-        }
-    }
+    private val splitInstallManagerListener =
+        SplitInstallStateUpdatedListener(::handleSplitInstallState)
 
     fun attachContext(context: Context) {
         this.context = WeakReference(context)
@@ -79,15 +54,45 @@ class MainViewModel : ViewModel() {
         }
     }
 
+    private fun handleSplitInstallState(state: SplitInstallSessionState) {
+        if (state.sessionId() != _uiState.value.sessionId) return
+
+        when (state.status()) {
+            SplitInstallSessionStatus.CANCELED -> Unit
+
+            SplitInstallSessionStatus.CANCELING -> Unit
+
+            SplitInstallSessionStatus.DOWNLOADED -> Unit
+
+            SplitInstallSessionStatus.DOWNLOADING -> Unit
+
+            SplitInstallSessionStatus.FAILED -> Unit
+
+            SplitInstallSessionStatus.INSTALLED -> finalizeModuleLoad(_uiState.value.targetActivityPath)
+
+            SplitInstallSessionStatus.INSTALLING -> Unit
+
+            SplitInstallSessionStatus.PENDING -> Unit
+
+            SplitInstallSessionStatus.REQUIRES_USER_CONFIRMATION -> Unit
+
+            SplitInstallSessionStatus.UNKNOWN -> Unit
+        }
+    }
+
     private fun navigateToDynamicFeatureModule(
         moduleName: String,
         targetActivityPath: String,
     ) {
         try {
-            _uiState.update { it.copy(targetActivityPath = targetActivityPath) }
+            _uiState.update {
+                it.copy(
+                    targetActivityPath = targetActivityPath,
+                    moduleName = moduleName
+                )
+            }
             if (splitInstallManager?.installedModules?.contains(moduleName) == true) {
-                DynamicFeatureLoader.load(Constants.MOCK_RESPONSE_RETROFIT_PROVIDER)
-                _effects.trySend(MainEffect.NavigateToDynamicFeatureModule(targetActivityPath))
+                finalizeModuleLoad(targetActivityPath)
             } else {
                 initSplitInstallManager(moduleName)
             }
@@ -109,6 +114,22 @@ class MainViewModel : ViewModel() {
             } catch (e: Exception) {
                 Log.d(this::class.java.simpleName, "ERROR : ${e.message}")
             }
+        }
+    }
+
+    private fun finalizeModuleLoad(targetPath: String) {
+        val providerClassName = determineProviderPath(_uiState.value.moduleName)
+        if (!providerClassName.isNullOrEmpty()) {
+            DynamicFeatureLoader.load(providerClassName)
+        }
+        _effects.trySend(MainEffect.NavigateToDynamicFeatureModule(targetPath))
+    }
+
+    private fun determineProviderPath(moduleName: String): String? {
+        return when (moduleName) {
+            context?.get()?.getString(R.string.module_mock_okhttp) -> Constants.MOCK_OKHTTP_PROVIDER
+            context?.get()?.getString(R.string.module_phone) -> Constants.MOCK_PHONE_PROVIDER
+            else -> null
         }
     }
 
