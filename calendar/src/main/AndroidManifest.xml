@@ -4,7 +4,7 @@
 
     <dist:module
         dist:instant="false"
-        dist:title="@string/title_calendar_view" >
+        dist:title="@string/title_calendar" >
         <dist:delivery>
             <dist:on-demand />
         </dist:delivery>

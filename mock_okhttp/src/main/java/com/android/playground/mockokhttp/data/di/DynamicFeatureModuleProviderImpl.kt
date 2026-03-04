@@ -2,12 +2,12 @@ package com.android.playground.mockokhttp.data.di
 
 import android.content.Context
 import com.android.playground.di.DynamicFeatureModuleProvider
-import com.android.playground.mockohttp.BuildConfig
+import com.android.playground.mockokhttp.BuildConfig
 import com.android.playground.mockokhttp.data.network.okhttp.MockApiInterceptor
 import com.android.playground.mockokhttp.data.network.retrofit.ApiService
 import com.android.playground.mockokhttp.data.repository.MockResponseRetrofitRepository
 import com.android.playground.mockokhttp.data.repository.MockResponseRetrofitRepositoryImpl
-import com.android.playground.mockokhttp.presentation.MockResponseRetrofitViewModel
+import com.android.playground.mockokhttp.presentation.MockOkhttpViewModel
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.core.module.Module
@@ -24,7 +24,7 @@ class DynamicFeatureModuleProviderImpl : DynamicFeatureModuleProvider {
 
             single<MockResponseRetrofitRepository> { MockResponseRetrofitRepositoryImpl(get()) }
 
-            viewModel { MockResponseRetrofitViewModel(get()) }
+            viewModel { MockOkhttpViewModel(get()) }
         }
     )
 

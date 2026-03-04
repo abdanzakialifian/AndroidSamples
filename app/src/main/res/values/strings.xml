@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">Android Playground</string>
-    <string name="title_dynamic_app_launcher">Dynamic App Launcher</string>
-    <string name="title_mock_response_retrofit">Mock Response Retrofit</string>
-    <string name="title_android_chart">Android Chart</string>
-    <string name="title_web_view_callback">WebView Callback</string>
-    <string name="title_calendar_view">Calendar View</string>
+    <string name="title_app_launcher">App Launcher</string>
+    <string name="title_mock_okhttp">Mock Okhttp</string>
+    <string name="title_chart">Chart</string>
+    <string name="title_web_view">WebView</string>
+    <string name="title_calendar">Calendar</string>
 </resources>

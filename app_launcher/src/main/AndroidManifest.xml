@@ -7,7 +7,7 @@
 
     <dist:module
         dist:instant="false"
-        dist:title="@string/title_dynamic_app_launcher">
+        dist:title="@string/title_app_launcher">
         <dist:delivery>
             <dist:on-demand />
         </dist:delivery>
@@ -17,7 +17,7 @@
 
     <application tools:ignore="MissingApplicationIcon">
         <activity
-            android:name=".DynamicAppLauncherActivity"
+            android:name=".AppLauncherActivity"
             android:exported="false" />
 
         <activity-alias

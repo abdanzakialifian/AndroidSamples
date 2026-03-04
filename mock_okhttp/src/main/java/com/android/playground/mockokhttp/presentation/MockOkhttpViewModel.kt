@@ -8,7 +8,7 @@ import com.android.playground.mockokhttp.utils.Result
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-class MockResponseRetrofitViewModel(
+class MockOkhttpViewModel(
     private val mockResponseRetrofitRepository: MockResponseRetrofitRepository
 ) : ViewModel() {
     private val _listUsers: MutableStateFlow<Result<List<ListUsersResponse>>> =

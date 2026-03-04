@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="module_dynamic_app_launcher">dynamicapplauncher</string>
-    <string name="module_mock_response_retrofit">mockresponseretrofit</string>
-    <string name="module_android_chart">androidchart</string>
-    <string name="module_web_view_callback">webviewcallback</string>
-    <string name="module_calendar_view">calendarview</string>
+    <string name="module_dynamic_app_launcher">app_launcher</string>
+    <string name="module_mock_response_retrofit">mock_okhttp</string>
+    <string name="module_android_chart">chart</string>
+    <string name="module_web_view_callback">webview</string>
+    <string name="module_calendar_view">calendar</string>
 </resources>

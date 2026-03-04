@@ -4,7 +4,7 @@
 
     <dist:module
         dist:instant="false"
-        dist:title="@string/title_mock_response_retrofit">
+        dist:title="@string/title_mock_okhttp">
         <dist:delivery>
             <dist:on-demand />
         </dist:delivery>
@@ -14,7 +14,7 @@
 
     <application>
         <activity
-            android:name=".presentation.MockResponseRetrofitActivity"
+            android:name=".presentation.MockOkhttpActivity"
             android:exported="false" />
     </application>
 

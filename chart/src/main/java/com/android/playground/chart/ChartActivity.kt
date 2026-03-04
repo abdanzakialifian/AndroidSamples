@@ -16,7 +16,7 @@ import java.util.Calendar
 import java.util.Locale
 import kotlin.random.Random
 
-class AndroidChartActivity : AppCompatActivity() {
+class ChartActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAndroidChartBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,8 +56,8 @@ class AndroidChartActivity : AppCompatActivity() {
             xAxis.position = XAxis.XAxisPosition.BOTTOM
             xAxis.enableGridDashedLine(10f, 10f, 10f)
             xAxis.setDrawAxisLine(false)
-            xAxis.gridColor = ContextCompat.getColor(this@AndroidChartActivity, R.color.light_grey)
-            xAxis.textColor = ContextCompat.getColor(this@AndroidChartActivity, R.color.grey)
+            xAxis.gridColor = ContextCompat.getColor(this@ChartActivity, R.color.light_grey)
+            xAxis.textColor = ContextCompat.getColor(this@ChartActivity, R.color.grey)
             xAxis.textSize = 12F
 
             val labels = ArrayList<Int>()
@@ -86,8 +86,8 @@ class AndroidChartActivity : AppCompatActivity() {
                 }
             }
             leftAxis.gridColor =
-                ContextCompat.getColor(this@AndroidChartActivity, R.color.light_grey)
-            leftAxis.textColor = ContextCompat.getColor(this@AndroidChartActivity, R.color.grey)
+                ContextCompat.getColor(this@ChartActivity, R.color.light_grey)
+            leftAxis.textColor = ContextCompat.getColor(this@ChartActivity, R.color.grey)
             leftAxis.textSize = 12F
 
             val rightAxis = chart1.axisRight
@@ -95,7 +95,7 @@ class AndroidChartActivity : AppCompatActivity() {
             rightAxis.axisMaximum = labels.last().toFloat()
             rightAxis.isEnabled = false
 
-            val marker = CustomMarkerViewWithPointer(this@AndroidChartActivity)
+            val marker = CustomMarkerViewWithPointer(this@ChartActivity)
             marker.chartView = chart1
             chart1.marker = marker
         }
@@ -128,8 +128,8 @@ class AndroidChartActivity : AppCompatActivity() {
             xAxis.position = XAxis.XAxisPosition.BOTTOM
             xAxis.enableGridDashedLine(10f, 10f, 10f)
             xAxis.setDrawAxisLine(false)
-            xAxis.gridColor = ContextCompat.getColor(this@AndroidChartActivity, R.color.light_grey)
-            xAxis.textColor = ContextCompat.getColor(this@AndroidChartActivity, R.color.grey)
+            xAxis.gridColor = ContextCompat.getColor(this@ChartActivity, R.color.light_grey)
+            xAxis.textColor = ContextCompat.getColor(this@ChartActivity, R.color.grey)
             xAxis.textSize = 12F
 
             val labels = ArrayList<Int>()
@@ -158,8 +158,8 @@ class AndroidChartActivity : AppCompatActivity() {
                 }
             }
             leftAxis.gridColor =
-                ContextCompat.getColor(this@AndroidChartActivity, R.color.light_grey)
-            leftAxis.textColor = ContextCompat.getColor(this@AndroidChartActivity, R.color.grey)
+                ContextCompat.getColor(this@ChartActivity, R.color.light_grey)
+            leftAxis.textColor = ContextCompat.getColor(this@ChartActivity, R.color.grey)
             leftAxis.textSize = 12F
 
             val rightAxis = chart2.axisRight
@@ -167,7 +167,7 @@ class AndroidChartActivity : AppCompatActivity() {
             rightAxis.axisMaximum = labels.last().toFloat()
             rightAxis.isEnabled = false
 
-            val marker = CustomMarkerViewWithPointer(this@AndroidChartActivity)
+            val marker = CustomMarkerViewWithPointer(this@ChartActivity)
             marker.chartView = chart2
             chart2.marker = marker
         }
@@ -200,8 +200,8 @@ class AndroidChartActivity : AppCompatActivity() {
             xAxis.position = XAxis.XAxisPosition.BOTTOM
             xAxis.enableGridDashedLine(10f, 10f, 10f)
             xAxis.setDrawAxisLine(false)
-            xAxis.gridColor = ContextCompat.getColor(this@AndroidChartActivity, R.color.light_grey)
-            xAxis.textColor = ContextCompat.getColor(this@AndroidChartActivity, R.color.grey)
+            xAxis.gridColor = ContextCompat.getColor(this@ChartActivity, R.color.light_grey)
+            xAxis.textColor = ContextCompat.getColor(this@ChartActivity, R.color.grey)
             xAxis.textSize = 12F
 
             val labels = ArrayList<Int>()
@@ -230,8 +230,8 @@ class AndroidChartActivity : AppCompatActivity() {
                 }
             }
             leftAxis.gridColor =
-                ContextCompat.getColor(this@AndroidChartActivity, R.color.light_grey)
-            leftAxis.textColor = ContextCompat.getColor(this@AndroidChartActivity, R.color.grey)
+                ContextCompat.getColor(this@ChartActivity, R.color.light_grey)
+            leftAxis.textColor = ContextCompat.getColor(this@ChartActivity, R.color.grey)
             leftAxis.textSize = 12F
 
             val rightAxis = chart3.axisRight
@@ -239,7 +239,7 @@ class AndroidChartActivity : AppCompatActivity() {
             rightAxis.axisMaximum = labels.last().toFloat()
             rightAxis.isEnabled = false
 
-            val marker = CustomMarkerViewWithPointer(this@AndroidChartActivity)
+            val marker = CustomMarkerViewWithPointer(this@ChartActivity)
             marker.chartView = chart3
             chart3.marker = marker
         }
@@ -275,8 +275,8 @@ class AndroidChartActivity : AppCompatActivity() {
             xAxis.position = XAxis.XAxisPosition.BOTTOM
             xAxis.enableGridDashedLine(10f, 10f, 10f)
             xAxis.setDrawAxisLine(false)
-            xAxis.gridColor = ContextCompat.getColor(this@AndroidChartActivity, R.color.grey)
-            xAxis.textColor = ContextCompat.getColor(this@AndroidChartActivity, R.color.grey)
+            xAxis.gridColor = ContextCompat.getColor(this@ChartActivity, R.color.grey)
+            xAxis.textColor = ContextCompat.getColor(this@ChartActivity, R.color.grey)
             xAxis.textSize = 12F
 
             val labels = ArrayList<Int>()
@@ -305,8 +305,8 @@ class AndroidChartActivity : AppCompatActivity() {
                 }
             }
             leftAxis.gridColor =
-                ContextCompat.getColor(this@AndroidChartActivity, R.color.grey)
-            leftAxis.textColor = ContextCompat.getColor(this@AndroidChartActivity, R.color.grey)
+                ContextCompat.getColor(this@ChartActivity, R.color.grey)
+            leftAxis.textColor = ContextCompat.getColor(this@ChartActivity, R.color.grey)
             leftAxis.textSize = 12F
 
             val rightAxis = chart4.axisRight
@@ -314,7 +314,7 @@ class AndroidChartActivity : AppCompatActivity() {
             rightAxis.axisMaximum = labels.last().toFloat()
             rightAxis.isEnabled = false
 
-            val marker = CustomMarkerViewWithoutPointer(this@AndroidChartActivity)
+            val marker = CustomMarkerViewWithoutPointer(this@ChartActivity)
             marker.chartView = chart4
             chart4.marker = marker
         }
@@ -372,7 +372,7 @@ class AndroidChartActivity : AppCompatActivity() {
                 // create a dataset and give it a type
                 lineDataSet = LineDataSet(entryList, "")
                 lineDataSet.axisDependency = AxisDependency.RIGHT
-                lineDataSet.color = ContextCompat.getColor(this@AndroidChartActivity, R.color.green)
+                lineDataSet.color = ContextCompat.getColor(this@ChartActivity, R.color.green)
                 lineDataSet.lineWidth = 3f
                 lineDataSet.setDrawCircles(false)
                 lineDataSet.setDrawValues(false)
@@ -380,7 +380,7 @@ class AndroidChartActivity : AppCompatActivity() {
                 lineDataSet.mode = LineDataSet.Mode.HORIZONTAL_BEZIER
 
                 val drawable =
-                    ContextCompat.getDrawable(this@AndroidChartActivity, R.drawable.fade_green)
+                    ContextCompat.getDrawable(this@ChartActivity, R.drawable.fade_green)
                 lineDataSet.fillDrawable = drawable
 
                 // create a data object with the data sets
@@ -446,7 +446,7 @@ class AndroidChartActivity : AppCompatActivity() {
                 //set2.setFillFormatter(new MyFillFormatter(900f));
                 lineDataSet = LineDataSet(entryList, "")
                 lineDataSet.axisDependency = AxisDependency.RIGHT
-                lineDataSet.color = ContextCompat.getColor(this@AndroidChartActivity, R.color.red)
+                lineDataSet.color = ContextCompat.getColor(this@ChartActivity, R.color.red)
                 lineDataSet.lineWidth = 3f
                 lineDataSet.setDrawCircles(false)
                 lineDataSet.setDrawValues(false)
@@ -454,7 +454,7 @@ class AndroidChartActivity : AppCompatActivity() {
                 lineDataSet.mode = LineDataSet.Mode.HORIZONTAL_BEZIER
 
                 val drawable =
-                    ContextCompat.getDrawable(this@AndroidChartActivity, R.drawable.fade_red)
+                    ContextCompat.getDrawable(this@ChartActivity, R.drawable.fade_red)
                 lineDataSet.fillDrawable = drawable
 
                 // create a data object with the data sets
@@ -530,7 +530,7 @@ class AndroidChartActivity : AppCompatActivity() {
             } else {
                 lineDataSet = LineDataSet(entryList, "")
                 lineDataSet.axisDependency = AxisDependency.RIGHT
-                lineDataSet.color = ContextCompat.getColor(this@AndroidChartActivity, R.color.green)
+                lineDataSet.color = ContextCompat.getColor(this@ChartActivity, R.color.green)
                 lineDataSet.lineWidth = 3f
                 lineDataSet.setDrawCircles(false)
                 lineDataSet.setDrawValues(false)
@@ -540,7 +540,7 @@ class AndroidChartActivity : AppCompatActivity() {
                 //set2.setFillFormatter(new MyFillFormatter(900f));
                 lineDataSet2 = LineDataSet(entryList2, "")
                 lineDataSet2.axisDependency = AxisDependency.RIGHT
-                lineDataSet2.color = ContextCompat.getColor(this@AndroidChartActivity, R.color.red)
+                lineDataSet2.color = ContextCompat.getColor(this@ChartActivity, R.color.red)
                 lineDataSet2.lineWidth = 3f
                 lineDataSet2.setDrawCircles(false)
                 lineDataSet2.setDrawValues(false)
@@ -620,24 +620,24 @@ class AndroidChartActivity : AppCompatActivity() {
             } else {
                 lineDataSet = LineDataSet(entryList, "")
                 lineDataSet.axisDependency = AxisDependency.RIGHT
-                lineDataSet.color = ContextCompat.getColor(this@AndroidChartActivity, R.color.green)
+                lineDataSet.color = ContextCompat.getColor(this@ChartActivity, R.color.green)
                 lineDataSet.lineWidth = 3f
                 lineDataSet.setDrawCircles(false)
                 lineDataSet.setDrawValues(false)
                 lineDataSet.setDrawFilled(true)
-                lineDataSet.fillColor = ContextCompat.getColor(this@AndroidChartActivity, R.color.green)
+                lineDataSet.fillColor = ContextCompat.getColor(this@ChartActivity, R.color.green)
                 lineDataSet.fillAlpha = 10
                 lineDataSet.mode = LineDataSet.Mode.HORIZONTAL_BEZIER
 
                 //set2.setFillFormatter(new MyFillFormatter(900f));
                 lineDataSet2 = LineDataSet(entryList2, "")
                 lineDataSet2.axisDependency = AxisDependency.RIGHT
-                lineDataSet2.color = ContextCompat.getColor(this@AndroidChartActivity, R.color.red)
+                lineDataSet2.color = ContextCompat.getColor(this@ChartActivity, R.color.red)
                 lineDataSet2.lineWidth = 3f
                 lineDataSet2.setDrawCircles(false)
                 lineDataSet2.setDrawValues(false)
                 lineDataSet2.setDrawFilled(true)
-                lineDataSet2.fillColor = ContextCompat.getColor(this@AndroidChartActivity, R.color.red)
+                lineDataSet2.fillColor = ContextCompat.getColor(this@ChartActivity, R.color.red)
                 lineDataSet2.fillAlpha = 10
                 lineDataSet2.mode = LineDataSet.Mode.HORIZONTAL_BEZIER
 

@@ -8,7 +8,7 @@
     android:background="@color/white"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context=".AndroidChartActivity">
+    tools:context=".ChartActivity">
 
     <com.github.mikephil.charting.charts.LineChart
         android:id="@+id/chart1"

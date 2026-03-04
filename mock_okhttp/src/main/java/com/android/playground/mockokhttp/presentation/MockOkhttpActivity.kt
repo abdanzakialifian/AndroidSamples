@@ -6,16 +6,16 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.android.playground.mockohttp.databinding.ActivityMockResponseRetrofitBinding
+import com.android.playground.mockokhttp.databinding.ActivityMockResponseRetrofitBinding
 import com.android.playground.mockokhttp.utils.Result
 import com.android.playground.mockokhttp.utils.Utils.handleResponseError
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 
-class MockResponseRetrofitActivity : AppCompatActivity() {
+class MockOkhttpActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMockResponseRetrofitBinding
 
-    private val viewModel by inject<MockResponseRetrofitViewModel>()
+    private val viewModel by inject<MockOkhttpViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

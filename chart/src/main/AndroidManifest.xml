@@ -4,7 +4,7 @@
 
     <dist:module
         dist:instant="false"
-        dist:title="@string/title_android_chart">
+        dist:title="@string/title_chart">
         <dist:delivery>
             <dist:on-demand />
         </dist:delivery>
@@ -14,7 +14,7 @@
 
     <application>
         <activity
-            android:name=".AndroidChartActivity"
+            android:name=".ChartActivity"
             android:exported="false" />
     </application>
 

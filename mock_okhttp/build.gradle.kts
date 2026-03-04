@@ -5,7 +5,7 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
 }
 android {
-    namespace = "com.android.playground.mockohttp"
+    namespace = "com.android.playground.mockokhttp"
     compileSdk = 35
 
     defaultConfig {

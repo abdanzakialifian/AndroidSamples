@@ -28,9 +28,9 @@ class DynamicAppLauncherService : Service() {
         firebaseRemoteConfig.setConfigSettingsAsync(configSettings)
 
         firebaseRemoteConfig.fetchAndActivate().addOnCompleteListener { task ->
-            val intent = Intent(DynamicAppLauncherActivity.ACTION_FETCH_STATE)
+            val intent = Intent(AppLauncherActivity.ACTION_FETCH_STATE)
 
-            intent.putExtra(DynamicAppLauncherActivity.FETCH_STATE, DynamicAppLauncherActivity.LOADING)
+            intent.putExtra(AppLauncherActivity.FETCH_STATE, AppLauncherActivity.LOADING)
 
             LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
 
@@ -52,9 +52,9 @@ class DynamicAppLauncherService : Service() {
                         } else {
                             launcherName
                         }
-                    intent.putExtra(DynamicAppLauncherActivity.FETCH_STATE, DynamicAppLauncherActivity.SUCCESS)
+                    intent.putExtra(AppLauncherActivity.FETCH_STATE, AppLauncherActivity.SUCCESS)
                 } else {
-                    intent.putExtra(DynamicAppLauncherActivity.FETCH_STATE, DynamicAppLauncherActivity.FAILED)
+                    intent.putExtra(AppLauncherActivity.FETCH_STATE, AppLauncherActivity.FAILED)
                 }
 
                 LocalBroadcastManager.getInstance(this).sendBroadcast(intent)

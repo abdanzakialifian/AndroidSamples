@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.android.playground.applauncher.databinding.ActivityDynamicAppLauncherBinding
 
-class DynamicAppLauncherActivity : AppCompatActivity() {
+class AppLauncherActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDynamicAppLauncherBinding
 
     private val dynamicAppLauncherBroadcastReceiver = object : BroadcastReceiver() {

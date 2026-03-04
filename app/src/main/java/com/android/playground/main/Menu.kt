@@ -18,41 +18,41 @@ val menus = listOf(
     Menu(
         moduleName = R.string.module_mock_response_retrofit,
         icon = R.drawable.box,
-        targetActivityPath = "com.android.playground.mockresponseretrofit.presentation.MockResponseRetrofitActivity",
+        targetActivityPath = "com.android.playground.mockokhttp.presentation.MockOkhttpActivity",
         backgroundColor = Color(0xFFEEF2FF),
-        title = "Mock Retrofit",
+        title = "Mock Okhttp",
         description = "Api simulation & network layer"
     ),
     Menu(
         moduleName = R.string.module_dynamic_app_launcher,
         icon = R.drawable.grid,
-        targetActivityPath = "com.android.playground.dynamicapplauncher.DynamicAppLauncherActivity",
+        targetActivityPath = "com.android.playground.applauncher.AppLauncherActivity",
         backgroundColor = Color(0xFFF5F3FF),
-        title = "Dynamic App Launcher",
+        title = "App Launcher",
         description = "Dynamic app icon from firebase"
     ),
     Menu(
         moduleName = R.string.module_android_chart,
         icon = R.drawable.chart,
-        targetActivityPath = "com.android.playground.androidchart.AndroidChartActivity",
+        targetActivityPath = "com.android.playground.chart.ChartActivity",
         backgroundColor = Color(0xFFF0FDF4),
-        title = "Android Chart",
+        title = "Chart",
         description = "Data visualization & graphs"
     ),
     Menu(
         moduleName = R.string.module_web_view_callback,
         icon = R.drawable.globe,
-        targetActivityPath = "com.android.playground.webviewcallback.WebViewCallbackActivity",
+        targetActivityPath = "com.android.playground.webview.WebViewCallbackActivity",
         backgroundColor = Color(0xFFFFF7ED),
-        title = "WebView Callback",
+        title = "WebView",
         description = "WebView callback for android"
     ),
     Menu(
         moduleName = R.string.module_calendar_view,
         icon = R.drawable.calendar,
-        targetActivityPath = "com.android.playground.calendarview.screen.CalendarViewActivity",
+        targetActivityPath = "com.android.playground.calendar.screen.CalendarViewActivity",
         backgroundColor = Color(0xFFFEF2F2),
-        title = "Calendar View",
+        title = "Calendar",
         description = "Date pickers & scheduling"
     ),
     Menu(
