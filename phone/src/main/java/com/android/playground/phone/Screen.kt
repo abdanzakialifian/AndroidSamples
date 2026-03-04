@@ -1,4 +1,4 @@
-package com.android.playground.wear
+package com.android.playground.phone
 
 import com.android.playground.wear.detail.NodeUi
 import kotlinx.serialization.Serializable

@@ -1,4 +1,4 @@
-package com.android.playground.wear
+package com.android.playground.phone
 
 import android.os.Build
 import android.os.Bundle
@@ -19,13 +19,13 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
-import com.android.playground.createNavType
-import com.android.playground.wear.detail.DetailScreen
-import com.android.playground.wear.detail.NodeUi
-import com.android.playground.wear.finding.FindingScreen
+import com.android.playground.core.common.createNavType
+import com.android.playground.phone.detail.DetailScreen
+import com.android.playground.phone.detail.NodeUi
+import com.android.playground.phone.finding.FindingScreen
 import kotlin.reflect.typeOf
 
-class WearActivity : ComponentActivity() {
+class PhoneActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.S)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

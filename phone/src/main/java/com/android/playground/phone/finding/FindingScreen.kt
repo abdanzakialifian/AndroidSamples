@@ -1,4 +1,4 @@
-package com.android.playground.wear.finding
+package com.android.playground.phone.finding
 
 import android.os.Build
 import androidx.annotation.RequiresApi

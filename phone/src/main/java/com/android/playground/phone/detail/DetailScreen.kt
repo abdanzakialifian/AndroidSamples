@@ -1,4 +1,4 @@
-package com.android.playground.wear.detail
+package com.android.playground.phone.detail
 
 import android.os.Build
 import androidx.annotation.RequiresApi

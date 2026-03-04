@@ -4,6 +4,8 @@ plugins {
     alias(libs.plugins.android.dynamic.feature)
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.kotlin.parcelize)
 }
 android {
     namespace = "com.android.playground.phone"

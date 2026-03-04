@@ -1,4 +1,4 @@
-package com.android.playground
+package com.android.playground.core.common
 
 import android.net.Uri
 import android.os.Build
