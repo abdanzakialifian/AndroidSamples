@@ -16,7 +16,7 @@ data class Menu(
 
 val menus = listOf(
     Menu(
-        moduleName = R.string.module_mock_response_retrofit,
+        moduleName = R.string.module_mock_okhttp,
         icon = R.drawable.box,
         targetActivityPath = "com.android.playground.mockokhttp.presentation.MockOkhttpActivity",
         backgroundColor = Color(0xFFEEF2FF),
@@ -24,7 +24,7 @@ val menus = listOf(
         description = "Api simulation & network layer"
     ),
     Menu(
-        moduleName = R.string.module_dynamic_app_launcher,
+        moduleName = R.string.module_app_launcher,
         icon = R.drawable.grid,
         targetActivityPath = "com.android.playground.applauncher.AppLauncherActivity",
         backgroundColor = Color(0xFFF5F3FF),
@@ -32,7 +32,7 @@ val menus = listOf(
         description = "Dynamic app icon from firebase"
     ),
     Menu(
-        moduleName = R.string.module_android_chart,
+        moduleName = R.string.module_chart,
         icon = R.drawable.chart,
         targetActivityPath = "com.android.playground.chart.ChartActivity",
         backgroundColor = Color(0xFFF0FDF4),
@@ -40,7 +40,7 @@ val menus = listOf(
         description = "Data visualization & graphs"
     ),
     Menu(
-        moduleName = R.string.module_web_view_callback,
+        moduleName = R.string.module_web_view,
         icon = R.drawable.globe,
         targetActivityPath = "com.android.playground.webview.WebViewCallbackActivity",
         backgroundColor = Color(0xFFFFF7ED),
@@ -48,7 +48,7 @@ val menus = listOf(
         description = "WebView callback for android"
     ),
     Menu(
-        moduleName = R.string.module_calendar_view,
+        moduleName = R.string.module_calendar,
         icon = R.drawable.calendar,
         targetActivityPath = "com.android.playground.calendar.screen.CalendarViewActivity",
         backgroundColor = Color(0xFFFEF2F2),
@@ -56,9 +56,9 @@ val menus = listOf(
         description = "Date pickers & scheduling"
     ),
     Menu(
-        moduleName = R.string.module_calendar_view,
+        moduleName = R.string.module_phone,
         icon = R.drawable.watch,
-        targetActivityPath = "com.android.playground.calendarview.screen.CalendarViewActivity",
+        targetActivityPath = "com.android.playground.phone.PhoneActivity",
         backgroundColor = Color(0xFFF1F5F9),
         title = "WearOS",
         description = "Smartwatch UI & complication"

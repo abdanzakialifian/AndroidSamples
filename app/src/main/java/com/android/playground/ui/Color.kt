@@ -1,4 +1,4 @@
-package com.android.playground.phone.ui
+package com.android.playground.ui
 
 import androidx.compose.ui.graphics.Color
 
