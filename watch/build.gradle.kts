@@ -44,21 +44,13 @@ android {
 }
 
 dependencies {
+    implementation(projects.core.ui)
     implementation(projects.core.common)
+    implementation(projects.core.device)
 
-    implementation(platform(libs.compose.bom))
-    implementation(libs.play.services.wearable)
-    implementation(libs.compose.ui)
-    implementation(libs.androidx.ui.graphics)
-    implementation(libs.compose.ui.tooling.preview)
-    debugImplementation(libs.compose.ui.tooling)
     implementation(libs.androidx.wear.compose.material3)
     implementation(libs.androidx.wear.compose.foundation)
     implementation(libs.androidx.wear.compose.navigation)
     implementation(libs.androidx.wear.compose.ui.tooling)
     implementation(libs.androidx.wear.tooling.preview)
-    implementation(libs.compose.activity)
-    implementation(libs.androidx.core.splashscreen)
-    implementation(libs.kotlinx.serialization.json)
-    implementation(libs.kotlinx.coroutines.play.services)
 }

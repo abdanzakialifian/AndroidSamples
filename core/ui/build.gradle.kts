@@ -35,6 +35,7 @@ dependencies {
     api(libs.compose.animation)
     api(libs.compose.animation.core)
     api(libs.compose.animation.graphics)
+    api(libs.androidx.ui.graphics)
     api(libs.compose.foundation)
     api(libs.compose.foundation.layout)
     api(libs.compose.material3)
@@ -44,4 +45,5 @@ dependencies {
     api(libs.compose.activity)
     api(libs.compose.navigation)
     debugApi(libs.compose.ui.tooling)
+    api(libs.androidx.core.splashscreen)
 }
