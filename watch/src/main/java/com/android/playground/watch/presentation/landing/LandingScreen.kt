@@ -17,11 +17,11 @@ import androidx.wear.compose.material3.SurfaceTransformation
 import androidx.wear.compose.material3.lazy.rememberTransformationSpec
 import androidx.wear.compose.material3.lazy.transformedHeight
 import androidx.wear.compose.ui.tooling.preview.WearPreviewSmallRound
-import com.android.playground.watch.presentation.theme.AndroidSamplesTheme
+import com.android.playground.watch.presentation.ui.WatchTheme
 
 @Composable
 fun LandingScreen(
-    onConnect: () -> Unit,
+    onDiscover: () -> Unit,
 ) {
     val columnState = rememberTransformingLazyColumnState()
 
@@ -40,12 +40,12 @@ fun LandingScreen(
                         .transformedHeight(this, transformationSpec),
                     transformation = SurfaceTransformation(transformationSpec),
                     shape = RoundedCornerShape(8.dp),
-                    onClick = onConnect,
+                    onClick = onDiscover,
                     label = {
                         Text(
                             modifier = Modifier.fillMaxWidth(),
                             textAlign = TextAlign.Center,
-                            text = "Connect",
+                            text = "Discover",
                             color = MaterialTheme.colorScheme.onPrimary
                         )
                     }
@@ -58,9 +58,9 @@ fun LandingScreen(
 @WearPreviewSmallRound
 @Composable
 fun LandingScreenPreview() {
-    AndroidSamplesTheme {
+    WatchTheme {
         LandingScreen(
-            onConnect = {}
+            onDiscover = {}
         )
     }
 }

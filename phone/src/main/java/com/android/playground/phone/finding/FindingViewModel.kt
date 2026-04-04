@@ -1,31 +1,32 @@
 package com.android.playground.phone.finding
 
-import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.android.playground.device.DataLayerPath
 import com.google.android.gms.wearable.CapabilityClient
-import com.google.android.gms.wearable.Wearable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
-import java.lang.ref.WeakReference
 
-class FindingViewModel : ViewModel() {
+class FindingViewModel(
+    private val capabilityClient: CapabilityClient,
+) : ViewModel() {
     private val _uiState: MutableStateFlow<FindingUiState> = MutableStateFlow(FindingUiState())
-    val uiState: StateFlow<FindingUiState> = _uiState
+    val uiState get() = _uiState.asStateFlow()
 
-    private var context: WeakReference<Context>? = null
-
-    val capabilityClient = context?.get()?.let { Wearable.getCapabilityClient(it) }
+    private val _effects: Channel<FindingEffect> = Channel(Channel.BUFFERED)
+    val effects get() = _effects.receiveAsFlow()
 
     private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
@@ -39,16 +40,15 @@ class FindingViewModel : ViewModel() {
         onIntent(FindingIntent.StartCountdown)
     }
 
-    fun attachContext(context: Context) {
-        this.context = WeakReference(context)
-    }
-
     fun onIntent(intent: FindingIntent) {
         when (intent) {
             FindingIntent.AddCapabilityChangedListener -> addCapabilityChangedListener()
             FindingIntent.GetCapability -> getCapability()
             FindingIntent.RemoveCapabilityChangedListener -> removeCapabilityChangedListener()
             FindingIntent.StartCountdown -> startCountdown()
+            is FindingIntent.OnNodeSelected -> _effects.trySend(
+                FindingEffect.GoToDetailScreen(intent.node)
+            )
         }
     }
 
@@ -66,8 +66,10 @@ class FindingViewModel : ViewModel() {
         viewModelScope.launch {
             runCatching {
                 val capabilityInfo =
-                    capabilityClient?.getCapability("wear", CapabilityClient.FILTER_REACHABLE)
-                        ?.await()
+                    capabilityClient.getCapability(
+                        DataLayerPath.WEAR_CAPABILITY,
+                        CapabilityClient.FILTER_REACHABLE
+                    ).await()
                 _uiState.update { it.copy(nodes = capabilityInfo?.nodes.orEmpty()) }
             }
         }
@@ -77,7 +79,10 @@ class FindingViewModel : ViewModel() {
         addCapabilityChangedListenerJob?.start()
         addCapabilityChangedListenerJob = viewModelScope.launch {
             runCatching {
-                capabilityClient?.addListener(capabilityChangedListener, "wear")?.await()
+                capabilityClient.addListener(
+                    capabilityChangedListener,
+                    DataLayerPath.WEAR_CAPABILITY
+                ).await()
             }
         }
     }
@@ -87,7 +92,10 @@ class FindingViewModel : ViewModel() {
             withContext(NonCancellable) {
                 runCatching {
                     addCapabilityChangedListenerJob?.cancel()
-                    capabilityClient?.removeListener(capabilityChangedListener, "wear")?.await()
+                    capabilityClient.removeListener(
+                        capabilityChangedListener,
+                        DataLayerPath.WEAR_CAPABILITY
+                    ).await()
                 }
             }
         }

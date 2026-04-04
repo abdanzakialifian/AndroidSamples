@@ -38,16 +38,18 @@ import java.util.Locale
 @Composable
 fun FindingScreen(
     viewModel: FindingViewModel = koinViewModel(),
-    onClick: (Node) -> Unit,
+    onGoToDetailScreen: (Node) -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     val lifecycleOwner = LocalLifecycleOwner.current
 
-    val context = LocalContext.current
-
     LaunchedEffect(Unit) {
-        viewModel.attachContext(context)
+        viewModel.effects.collect { effect ->
+            when(effect) {
+                is FindingEffect.GoToDetailScreen -> onGoToDetailScreen(effect.node)
+            }
+        }
     }
 
     LaunchedEffect(uiState.time) {
@@ -77,18 +79,14 @@ fun FindingScreen(
 
     FindingContent(
         uiState = uiState,
-        onClick = onClick,
-        onRetry = {
-            viewModel.onIntent(FindingIntent.StartCountdown)
-        },
+        onIntent = viewModel::onIntent,
     )
 }
 
 @Composable
 private fun FindingContent(
     uiState: FindingUiState,
-    onClick: (Node) -> Unit,
-    onRetry: () -> Unit,
+    onIntent: (FindingIntent) -> Unit,
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
@@ -117,7 +115,7 @@ private fun FindingContent(
                                 indication = null,
                                 interactionSource = remember { MutableInteractionSource() },
                                 onClick = {
-                                    onClick(node)
+                                    onIntent(FindingIntent.OnNodeSelected(node))
                                 }
                             )
                             .padding(4.dp),
@@ -129,7 +127,9 @@ private fun FindingContent(
                     if (uiState.nodes.isEmpty() && uiState.time == 0) {
                         Button(
                             modifier = Modifier.padding(top = 16.dp),
-                            onClick = onRetry,
+                            onClick = {
+                                onIntent(FindingIntent.StartCountdown)
+                            },
                             content = {
                                 Text(text = "Search Again")
                             }
@@ -153,8 +153,7 @@ private fun FindingContentPreview() {
     MaterialTheme(colorScheme = colorScheme) {
         FindingContent(
             uiState = FindingUiState(),
-            onClick = {},
-            onRetry = {}
+            onIntent = {}
         )
     }
 }

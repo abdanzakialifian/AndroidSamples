@@ -1,6 +1,7 @@
 package com.android.playground.phone.detail
 
 import android.os.Build
+import androidx.activity.compose.BackHandler
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
@@ -15,13 +16,50 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun DetailScreen(node: NodeUi, onBack: () -> Unit) {
+fun DetailScreen(
+    node: NodeUi,
+    viewModel: DetailViewModel = koinViewModel(),
+    onNavigateBack: () -> Unit
+) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(Unit) {
+        viewModel.onIntent(DetailIntent.SetNodeOfWatch(node))
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.effects.collect { effect ->
+            when (effect) {
+                DetailEffect.NavigateBack -> onNavigateBack()
+            }
+        }
+    }
+
+    BackHandler {
+        viewModel.onIntent(DetailIntent.OnNavigateBack)
+    }
+
+    DetailContent(
+        uiState = uiState,
+        onIntent = viewModel::onIntent
+    )
+}
+
+@Composable
+private fun DetailContent(
+    uiState: DetailUiState,
+    onIntent: (DetailIntent) -> Unit
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -30,21 +68,21 @@ fun DetailScreen(node: NodeUi, onBack: () -> Unit) {
         Text(
             text = buildString {
                 append("Id : ")
-                append(node.id)
+                append(uiState.nodeId)
             },
         )
 
         Text(
             text = buildString {
                 append("Name : ")
-                append(node.displayName)
+                append(uiState.displayName)
             },
         )
 
         Text(
             text = buildString {
                 append("Nearby : ")
-                append(node.isNearby)
+                append(uiState.isNearby)
             },
         )
 
@@ -56,7 +94,9 @@ fun DetailScreen(node: NodeUi, onBack: () -> Unit) {
         ) {
             Button(
                 modifier = Modifier.weight(1F),
-                onClick = onBack,
+                onClick = {
+                    onIntent(DetailIntent.OnNavigateBack)
+                },
                 content = {
                     Text(text = "Back")
                 }
@@ -64,7 +104,9 @@ fun DetailScreen(node: NodeUi, onBack: () -> Unit) {
 
             Button(
                 modifier = Modifier.weight(1F),
-                onClick = {},
+                onClick = {
+                    onIntent(DetailIntent.RequestConnect(uiState.nodeId))
+                },
                 content = {
                     Text(text = "Connect")
                 }
@@ -83,13 +125,13 @@ private fun DetailScreenPreview() {
             context
         )
     MaterialTheme(colorScheme = colorScheme) {
-        DetailScreen(
-            node = NodeUi(
-                id = "12345",
-                displayName = "Galaxy WearOS",
-                isNearby = false
+        DetailContent(
+            uiState = DetailUiState(
+                nodeId = "12345",
+                displayName = "Galaxy Wearable",
+                isNearby = true,
             ),
-            onBack = {}
+            onIntent = {}
         )
     }
 }

@@ -55,7 +55,7 @@ class PhoneActivity : ComponentActivity() {
         ) {
             composable<Screen.Finding> {
                 FindingScreen(
-                    onClick = { node ->
+                    onGoToDetailScreen = { node ->
                         val nodeUi = NodeUi(
                             id = node.id,
                             displayName = node.displayName,
@@ -74,8 +74,8 @@ class PhoneActivity : ComponentActivity() {
                 val detail = backStackEntry.toRoute<Screen.Detail>()
                 DetailScreen(
                     node = detail.node,
-                    onBack = {
-                        navController.navigateUp()
+                    onNavigateBack = {
+                        finish()
                     }
                 )
             }

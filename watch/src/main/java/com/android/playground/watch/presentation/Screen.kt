@@ -8,5 +8,5 @@ sealed class Screen(val route: String) {
     object Landing: Screen("landing_screen")
 
     @Serializable
-    object Connect: Screen("connect_screen")
+    object Discoverable: Screen("connect_screen")
 }
