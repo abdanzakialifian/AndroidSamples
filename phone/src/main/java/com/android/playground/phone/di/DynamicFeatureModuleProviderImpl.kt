@@ -1,6 +1,7 @@
 package com.android.playground.phone.di
 
 import com.android.playground.di.DynamicFeatureModuleProvider
+import com.android.playground.phone.dashboard.DashboardViewModel
 import com.android.playground.phone.detail.DetailViewModel
 import com.android.playground.phone.finding.FindingViewModel
 import com.google.android.gms.wearable.Wearable
@@ -16,6 +17,7 @@ class DynamicFeatureModuleProviderImpl : DynamicFeatureModuleProvider {
             factory { Wearable.getMessageClient(androidContext()) }
             viewModel { FindingViewModel(get()) }
             viewModel { DetailViewModel(get()) }
+            viewModel { DashboardViewModel() }
         }
     )
 }

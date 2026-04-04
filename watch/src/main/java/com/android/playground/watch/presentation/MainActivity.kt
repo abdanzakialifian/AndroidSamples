@@ -10,13 +10,18 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.navigation.NavType
+import androidx.navigation.navArgument
 import androidx.wear.compose.material3.AppScaffold
 import androidx.wear.compose.navigation.SwipeDismissableNavHost
 import androidx.wear.compose.navigation.composable
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
+import com.android.playground.device.DeviceInfo
+import com.android.playground.watch.presentation.dashboard.DashboardScreen
 import com.android.playground.watch.presentation.discoverable.DiscoverableScreen
 import com.android.playground.watch.presentation.landing.LandingScreen
 import com.android.playground.watch.presentation.ui.WatchTheme
+import kotlinx.serialization.json.Json
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,7 +54,30 @@ class MainActivity : ComponentActivity() {
 
             composable(Screen.Discoverable.route) {
                 DiscoverableScreen(
-                    onGoToNextScreen = {}
+                    onGoToDashboardScreen = { deviceInfoJson ->
+                        navController.navigate(Screen.Dashboard.createRoute(deviceInfoJson))
+                    }
+                )
+            }
+
+            composable(
+                route = Screen.Dashboard.route,
+                arguments = listOf(
+                    navArgument(ScreenPath.DEVICE_INFO) {
+                        type = NavType.StringType
+                    }
+                )
+            ) { backStackEntry ->
+                val deviceInfoJson = backStackEntry.arguments?.getString(ScreenPath.DEVICE_INFO).orEmpty()
+                val deviceInfo = Json.decodeFromString<DeviceInfo>(deviceInfoJson)
+                DashboardScreen(
+                    deviceInfo = deviceInfo,
+                    onGoToBackScreen = {
+                        navController.popBackStack(
+                            route = Screen.Landing.route,
+                            inclusive = false
+                        )
+                    }
                 )
             }
         }

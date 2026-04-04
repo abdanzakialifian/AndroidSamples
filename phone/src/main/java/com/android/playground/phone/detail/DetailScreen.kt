@@ -5,12 +5,12 @@ import androidx.activity.compose.BackHandler
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.dynamicDarkColorScheme
@@ -18,6 +18,7 @@ import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
@@ -29,24 +30,26 @@ import org.koin.androidx.compose.koinViewModel
 fun DetailScreen(
     node: NodeUi,
     viewModel: DetailViewModel = koinViewModel(),
-    onNavigateBack: () -> Unit
+    onGoToDashboardScreen: (String) -> Unit,
+    onGoToBackScreen: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
-        viewModel.onIntent(DetailIntent.SetNodeOfWatch(node))
+        viewModel.onIntent(DetailIntent.LoadNode(node))
     }
 
     LaunchedEffect(Unit) {
         viewModel.effects.collect { effect ->
             when (effect) {
-                DetailEffect.NavigateBack -> onNavigateBack()
+                is DetailEffect.GoToDashboardScreen -> onGoToDashboardScreen(effect.deviceInfoJson)
+                DetailEffect.GoToBackScreen -> onGoToBackScreen()
             }
         }
     }
 
     BackHandler {
-        viewModel.onIntent(DetailIntent.OnNavigateBack)
+        viewModel.onIntent(DetailIntent.OnGoToBackScreen)
     }
 
     DetailContent(
@@ -60,56 +63,49 @@ private fun DetailContent(
     uiState: DetailUiState,
     onIntent: (DetailIntent) -> Unit
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-    ) {
-        Text(
-            text = buildString {
-                append("Id : ")
-                append(uiState.nodeId)
-            },
-        )
-
-        Text(
-            text = buildString {
-                append("Name : ")
-                append(uiState.displayName)
-            },
-        )
-
-        Text(
-            text = buildString {
-                append("Nearby : ")
-                append(uiState.isNearby)
-            },
-        )
-
-        Row(
+    Box(modifier = Modifier.fillMaxSize()) {
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 16.dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp)
+                .fillMaxSize()
+                .padding(16.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Button(
-                modifier = Modifier.weight(1F),
-                onClick = {
-                    onIntent(DetailIntent.OnNavigateBack)
+            Text(
+                text = buildString {
+                    append("Id : ")
+                    append(uiState.nodeId)
                 },
-                content = {
-                    Text(text = "Back")
-                }
+            )
+
+            Text(
+                text = buildString {
+                    append("Name : ")
+                    append(uiState.displayName)
+                },
+            )
+
+            Text(
+                text = buildString {
+                    append("Nearby : ")
+                    append(uiState.isNearby)
+                },
             )
 
             Button(
-                modifier = Modifier.weight(1F),
+                modifier = Modifier.padding(top = 16.dp),
                 onClick = {
                     onIntent(DetailIntent.RequestConnect(uiState.nodeId))
                 },
                 content = {
                     Text(text = "Connect")
                 }
+            )
+        }
+
+        if (uiState.isLoading) {
+            CircularProgressIndicator(
+                modifier = Modifier.align(Alignment.Center)
             )
         }
     }

@@ -3,7 +3,7 @@ package com.android.playground.watch.presentation.discoverable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.android.playground.device.DataLayerPath
-import com.android.playground.device.DataLayerRequest
+import com.android.playground.device.DeviceInfo
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.TaskCompletionSource
 import com.google.android.gms.tasks.Tasks
@@ -127,15 +127,15 @@ class DiscoverableViewModel(
     }
 
     private fun setConnected(byteArray: ByteArray): Task<ByteArray> {
-        if (!byteArray.contentEquals(DataLayerRequest.CONNECT.toByteArray())) {
-            return Tasks.forResult(false.toString().toByteArray())
+        if (byteArray.isEmpty()) {
+            return Tasks.forResult(byteArrayOf())
         }
 
         val taskCompletionSource = TaskCompletionSource<ByteArray>()
         viewModelScope.launch {
             delay(3000L)
-            _effects.trySend(DiscoverableEffect.GoToNextScreen)
-            taskCompletionSource.setResult(true.toString().toByteArray())
+            _effects.trySend(DiscoverableEffect.GoToDashboardScreen(String(byteArray)))
+            taskCompletionSource.setResult(DeviceInfo().encodeToByteArray())
         }
         return taskCompletionSource.task
     }

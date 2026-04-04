@@ -9,4 +9,13 @@ sealed class Screen(val route: String) {
 
     @Serializable
     object Discoverable: Screen("connect_screen")
+
+    @Serializable
+    object Dashboard : Screen("dashboard_screen/{${ScreenPath.DEVICE_INFO}}") {
+        fun createRoute(deviceInfoJson: String) = "dashboard_screen/$deviceInfoJson"
+    }
+}
+
+object ScreenPath {
+    const val DEVICE_INFO = "deviceInfo"
 }

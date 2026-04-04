@@ -27,14 +27,14 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun DiscoverableScreen(
     viewModel: DiscoverableViewModel = koinViewModel(),
-    onGoToNextScreen: () -> Unit
+    onGoToDashboardScreen: (String) -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
         viewModel.effects.collect { effect ->
             when (effect) {
-                DiscoverableEffect.GoToNextScreen -> onGoToNextScreen()
+                is DiscoverableEffect.GoToDashboardScreen -> onGoToDashboardScreen(effect.deviceInfoJson)
             }
         }
     }

@@ -1,5 +1,6 @@
 package com.android.playground.watch.di
 
+import com.android.playground.watch.presentation.dashboard.DashboardViewModel
 import com.android.playground.watch.presentation.discoverable.DiscoverableViewModel
 import com.google.android.gms.wearable.Wearable
 import org.koin.android.ext.koin.androidContext
@@ -10,4 +11,5 @@ val mainModule = module {
     factory { Wearable.getMessageClient(androidContext()) }
     factory { Wearable.getCapabilityClient(androidContext()) }
     viewModel { DiscoverableViewModel(get(), get()) }
+    viewModel { DashboardViewModel() }
 }

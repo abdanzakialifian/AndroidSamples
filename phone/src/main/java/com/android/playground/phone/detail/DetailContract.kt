@@ -8,17 +8,18 @@ data class DetailUiState(
     val nodeId: String = "",
     val displayName: String = "",
     val isNearby: Boolean = false,
-    val isConnected: Boolean = false,
+    val isLoading: Boolean = false,
 )
 
 sealed interface DetailIntent {
     data class RequestConnect(val nodeId: String) : DetailIntent
-    data class SetNodeOfWatch(val node: NodeUi) : DetailIntent
-    data object OnNavigateBack : DetailIntent
+    data class LoadNode(val node: NodeUi) : DetailIntent
+    data object OnGoToBackScreen : DetailIntent
 }
 
 sealed interface DetailEffect {
-    data object NavigateBack : DetailEffect
+    data class GoToDashboardScreen(val deviceInfoJson: String) : DetailEffect
+    data object GoToBackScreen : DetailEffect
 }
 
 @Serializable

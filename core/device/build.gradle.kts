@@ -3,6 +3,8 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.kotlin.parcelize)
 }
 
 android {
@@ -28,4 +30,5 @@ android {
 dependencies {
     api(libs.play.services.wearable)
     api(libs.kotlinx.coroutines.play.services)
+    api(libs.kotlinx.serialization.json)
 }

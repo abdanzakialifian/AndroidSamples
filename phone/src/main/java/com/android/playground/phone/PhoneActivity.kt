@@ -20,9 +20,12 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.android.playground.core.common.createNavType
+import com.android.playground.device.DeviceInfo
+import com.android.playground.phone.dashboard.DashboardScreen
 import com.android.playground.phone.detail.DetailScreen
 import com.android.playground.phone.detail.NodeUi
 import com.android.playground.phone.finding.FindingScreen
+import kotlinx.serialization.json.Json
 import kotlin.reflect.typeOf
 
 class PhoneActivity : ComponentActivity() {
@@ -74,7 +77,21 @@ class PhoneActivity : ComponentActivity() {
                 val detail = backStackEntry.toRoute<Screen.Detail>()
                 DetailScreen(
                     node = detail.node,
-                    onNavigateBack = {
+                    onGoToDashboardScreen = { deviceInfoJson ->
+                        navController.navigate(Screen.Dashboard(deviceInfoJson))
+                    },
+                    onGoToBackScreen = {
+                        finish()
+                    }
+                )
+            }
+
+            composable<Screen.Dashboard> { backStackEntry ->
+                val dashboard = backStackEntry.toRoute<Screen.Dashboard>()
+                val deviceInfo = Json.decodeFromString<DeviceInfo>(dashboard.deviceInfoJson)
+                DashboardScreen(
+                    deviceInfo = deviceInfo,
+                    onGoToBackScreen = {
                         finish()
                     }
                 )

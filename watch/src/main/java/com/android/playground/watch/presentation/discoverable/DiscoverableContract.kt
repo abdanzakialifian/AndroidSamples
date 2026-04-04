@@ -14,5 +14,5 @@ sealed interface DiscoverableIntent {
 }
 
 sealed interface DiscoverableEffect {
-    data object GoToNextScreen : DiscoverableEffect
+    data class GoToDashboardScreen(val deviceInfoJson: String) : DiscoverableEffect
 }
