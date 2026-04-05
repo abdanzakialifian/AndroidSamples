@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.android.playground.ui.PlaygroundTheme
 
 @Composable
 fun CalendarViewMainScreen(
@@ -33,8 +34,10 @@ fun CalendarViewMainScreen(
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun CalendarViewMainScreenPreview() {
-    CalendarViewMainScreen(
-        onClickCalendarViewFirst = {},
-        onClickCalendarViewSecond = {},
-    )
+    PlaygroundTheme {
+        CalendarViewMainScreen(
+            onClickCalendarViewFirst = {},
+            onClickCalendarViewSecond = {},
+        )
+    }
 }

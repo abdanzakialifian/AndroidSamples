@@ -30,10 +30,10 @@ import com.android.playground.calendar.CalendarState
 import com.android.playground.calendar.enum.DayPosition
 import com.android.playground.calendar.Utils
 import com.android.playground.calendar.rememberCalendarState
-import com.android.playground.calendar.ui.theme.Black5
-import com.android.playground.calendar.ui.theme.Grey2
-import com.android.playground.calendar.ui.theme.Red2
-import com.android.playground.calendar.ui.theme.SoftPeach
+import com.android.playground.calendar.Black5
+import com.android.playground.calendar.Grey2
+import com.android.playground.calendar.Red2
+import com.android.playground.calendar.SoftPeach
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.format.TextStyle

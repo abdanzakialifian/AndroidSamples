@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -23,7 +24,7 @@ import com.android.playground.calendar.extensions.completelyVisibleMonth
 import com.android.playground.calendar.extensions.nextMonth
 import com.android.playground.calendar.extensions.previousMonth
 import com.android.playground.calendar.rememberCalendarState
-import com.android.playground.calendar.ui.theme.White
+import com.android.playground.ui.PlaygroundTheme
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -63,7 +64,7 @@ fun CalendarViewFirstScreen() {
             }
     }
 
-    Column(modifier = Modifier.background(White)) {
+    Column(modifier = Modifier.background(MaterialTheme.colorScheme.background)) {
         CalendarTitle(
             modifier = Modifier.padding(horizontal = 8.dp, vertical = 12.dp),
             currentMonth = visibleMonth.yearMonth,
@@ -93,5 +94,7 @@ fun CalendarViewFirstScreen() {
 @Preview
 @Composable
 fun CalendarViewFirstScreenPreview() {
-    CalendarViewFirstScreen()
+    PlaygroundTheme {
+        CalendarViewFirstScreen()
+    }
 }
