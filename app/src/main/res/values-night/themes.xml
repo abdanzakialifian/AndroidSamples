@@ -1,7 +1,40 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.AndroidSamples" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.AndroidPlayground" parent="Theme.Material3.DayNight.NoActionBar">
+
+        <item name="android:windowLightStatusBar">true</item>
+
+        <!-- Primary -->
+        <item name="colorPrimary">@color/brand_indigo</item>
+        <item name="colorOnPrimary">@android:color/white</item>
+
+        <!-- Background -->
+        <item name="android:colorBackground">@color/app_bg</item>
+        <item name="colorOnBackground">@color/slate_900</item>
+
+        <!-- Surface -->
+        <item name="colorSurface">@color/app_surface</item>
+        <item name="colorOnSurface">@color/slate_900</item>
+
+        <!-- Secondary -->
+        <item name="colorSecondary">@color/slate_500</item>
+        <item name="colorOnSecondary">@android:color/white</item>
+
+        <!-- Tertiary -->
+        <item name="colorTertiary">@color/success_green</item>
+        <item name="colorOnTertiary">@android:color/white</item>
+
+        <!-- Outline -->
+        <item name="colorOutline">@color/slate_400</item>
+        <item name="colorOutlineVariant">@color/app_outline</item>
+
+        <!-- Surface Variant -->
+        <item name="colorSurfaceVariant">@color/app_bg</item>
+        <item name="colorOnSurfaceVariant">@color/slate_500</item>
+
+        <!-- Error -->
+        <item name="colorError">@color/error_red</item>
+        <item name="colorOnError">@android:color/white</item>
+
     </style>
 </resources>
