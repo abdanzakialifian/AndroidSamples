@@ -1,6 +1,6 @@
-package com.android.playground.phone
+package com.android.playground.phone.presentation
 
-import com.android.playground.phone.detail.NodeUi
+import com.android.playground.phone.presentation.detail.NodeUi
 import kotlinx.serialization.Serializable
 
 @Serializable

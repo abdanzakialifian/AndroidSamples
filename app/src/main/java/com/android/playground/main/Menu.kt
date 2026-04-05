@@ -58,7 +58,7 @@ val menus = listOf(
     Menu(
         moduleName = R.string.module_phone,
         icon = R.drawable.watch,
-        targetActivityPath = "com.android.playground.phone.PhoneActivity",
+        targetActivityPath = "com.android.playground.phone.presentation.PhoneActivity",
         backgroundColor = Color(0xFFF1F5F9),
         title = "WearOS",
         description = "Smartwatch UI & complication"

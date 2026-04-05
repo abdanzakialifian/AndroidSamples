@@ -1,9 +1,9 @@
 package com.android.playground.phone.di
 
 import com.android.playground.di.DynamicFeatureModuleProvider
-import com.android.playground.phone.dashboard.DashboardViewModel
-import com.android.playground.phone.detail.DetailViewModel
-import com.android.playground.phone.finding.FindingViewModel
+import com.android.playground.phone.presentation.dashboard.DashboardViewModel
+import com.android.playground.phone.presentation.detail.DetailViewModel
+import com.android.playground.phone.presentation.finding.FindingViewModel
 import com.google.android.gms.wearable.Wearable
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.Module

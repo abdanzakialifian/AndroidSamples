@@ -1,4 +1,4 @@
-package com.android.playground.phone.dashboard
+package com.android.playground.phone.presentation.dashboard
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column

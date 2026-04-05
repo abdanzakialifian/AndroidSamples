@@ -1,4 +1,4 @@
-package com.android.playground.phone.dashboard
+package com.android.playground.phone.presentation.dashboard
 
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.channels.Channel

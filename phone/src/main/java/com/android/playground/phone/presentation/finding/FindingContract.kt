@@ -1,4 +1,4 @@
-package com.android.playground.phone.finding
+package com.android.playground.phone.presentation.finding
 
 import androidx.compose.runtime.Immutable
 import com.google.android.gms.wearable.Node

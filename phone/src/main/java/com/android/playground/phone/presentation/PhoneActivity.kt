@@ -1,30 +1,23 @@
-package com.android.playground.phone
+package com.android.playground.phone.presentation
 
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.dynamicDarkColorScheme
-import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.android.playground.core.common.createNavType
 import com.android.playground.device.DeviceInfo
-import com.android.playground.phone.dashboard.DashboardScreen
-import com.android.playground.phone.detail.DetailScreen
-import com.android.playground.phone.detail.NodeUi
-import com.android.playground.phone.finding.FindingScreen
+import com.android.playground.phone.presentation.dashboard.DashboardScreen
+import com.android.playground.phone.presentation.detail.DetailScreen
+import com.android.playground.phone.presentation.detail.NodeUi
+import com.android.playground.phone.presentation.finding.FindingScreen
+import com.android.playground.ui.PlaygroundTheme
 import kotlinx.serialization.json.Json
 import kotlin.reflect.typeOf
 
@@ -32,18 +25,9 @@ class PhoneActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.S)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContent {
-            val context = LocalContext.current
-            val colorScheme = if (isSystemInDarkTheme()) {
-                dynamicDarkColorScheme(context)
-            } else {
-                dynamicLightColorScheme(context)
-            }
-            MaterialTheme(colorScheme = colorScheme) {
-                Scaffold { paddingValues ->
-                    WearableGraph(modifier = Modifier.padding(paddingValues))
-                }
+            PlaygroundTheme {
+                WearableGraph()
             }
         }
     }

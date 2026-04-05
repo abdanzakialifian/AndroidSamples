@@ -1,4 +1,4 @@
-package com.android.playground.phone.detail
+package com.android.playground.phone.presentation.detail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

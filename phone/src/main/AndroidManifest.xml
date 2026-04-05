@@ -12,7 +12,7 @@
 
     <application tools:ignore="MissingApplicationIcon">
         <activity
-            android:name=".PhoneActivity"
+            android:name=".presentation.PhoneActivity"
             android:exported="false" />
     </application>
 </manifest>

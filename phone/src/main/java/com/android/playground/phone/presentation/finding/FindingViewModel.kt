@@ -1,4 +1,4 @@
-package com.android.playground.phone.finding
+package com.android.playground.phone.presentation.finding
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
