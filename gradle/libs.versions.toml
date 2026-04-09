@@ -31,6 +31,7 @@ coreSplashscreen = "1.2.0-beta01"
 ksp = "2.1.10-1.0.30"
 org-jetbrains-kotlinx = "1.10.1"
 kotlinxSerialization = "1.8.0"
+sonarqube = "5.1.0.4882"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -93,3 +94,4 @@ kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "ko
 kotlin-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
+sonarqube = { id = "org.sonarqube", version.ref = "sonarqube" }
