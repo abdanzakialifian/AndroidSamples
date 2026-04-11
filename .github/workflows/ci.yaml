@@ -3,10 +3,12 @@ name: CI
 # reference : https://tharunbalaji2004.hashnode.dev/android-ci-cd
 
 on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+  workflow_dispatch:
+    inputs:
+      build_type:
+        description: 'Build Type'
+        required: true
+        default: 'debug'
 
 jobs:
   lint:
