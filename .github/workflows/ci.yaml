@@ -1,6 +1,6 @@
 # reference : https://tharunbalaji2004.hashnode.dev/android-ci-cd
 
-name: CI
+name: CI/CD Pipeline
 
 run-name: Build ${{ github.ref_name }} by @${{ github.actor }}
 
