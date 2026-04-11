@@ -63,7 +63,7 @@ jobs:
           arch: x86_64
           profile: pixel_3a
           emulator-boot-timeout: 600
-          emulator-options: -no-snapshot -noaudio -no-boot-anim
+          emulator-options: -no-window -no-audio -no-boot-anim -gpu swiftshader_indirect -accel off -no-snapshot
           disable-animations: true
           script: ./gradlew connectedCheck
 
